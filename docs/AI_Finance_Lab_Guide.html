@@ -1,0 +1,1816 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI in Digital Finance & Fintech — Lab Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=DM+Sans:wght@300;400;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0A1628;
+    --blue: #1565C0;
+    --cyan: #00B4D8;
+    --gold: #F59E0B;
+    --green: #10B981;
+    --red: #EF4444;
+    --purple: #8B5CF6;
+    --white: #FFFFFF;
+    --gray: #64748B;
+    --light: #F0F4FF;
+    --border: #E2E8F0;
+    --code-bg: #0D1B2A;
+    --code-text: #A8D8EA;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #F8FAFF;
+    color: var(--navy);
+    line-height: 1.65;
+  }
+
+  /* ── TOP HERO ── */
+  .hero {
+    background: var(--navy);
+    padding: 48px 0 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -80px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(0,180,216,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-inner { max-width: 1080px; margin: 0 auto; padding: 0 32px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(0,180,216,0.15);
+    border: 1px solid rgba(0,180,216,0.4);
+    border-radius: 20px;
+    padding: 5px 16px;
+    font-size: 11px; font-weight: 600; letter-spacing: 2px;
+    color: var(--cyan); text-transform: uppercase; margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    color: var(--white); font-weight: 900;
+    line-height: 1.15; margin-bottom: 12px;
+  }
+  .hero h1 span { color: var(--cyan); }
+  .hero p { color: #A8C4E8; font-size: 1rem; max-width: 640px; margin-bottom: 32px; }
+  .hero-meta {
+    display: flex; gap: 24px; flex-wrap: wrap;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 16px 0; margin-top: 8px;
+  }
+  .hero-meta-item { display: flex; flex-direction: column; }
+  .hero-meta-item .label { font-size: 10px; color: var(--gray); text-transform: uppercase; letter-spacing: 1px; }
+  .hero-meta-item .val { font-size: 14px; color: var(--white); font-weight: 600; }
+  .progress-bar {
+    background: rgba(255,255,255,0.06);
+    height: 4px; margin: 0 -32px;
+  }
+  .progress-fill { height: 4px; background: linear-gradient(90deg, var(--cyan), var(--purple)); }
+
+  /* ── TOC SIDEBAR ── */
+  .layout { display: flex; max-width: 1080px; margin: 0 auto; padding: 40px 32px; gap: 40px; }
+  .sidebar {
+    width: 220px; flex-shrink: 0;
+    position: sticky; top: 24px; height: fit-content;
+  }
+  .toc-label { font-size: 10px; font-weight: 700; letter-spacing: 2px; color: var(--gray); text-transform: uppercase; margin-bottom: 12px; }
+  .toc-list { list-style: none; }
+  .toc-list li { margin-bottom: 2px; }
+  .toc-list a {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12.5px; color: var(--gray); text-decoration: none;
+    padding: 5px 8px; border-radius: 6px; transition: all 0.15s;
+  }
+  .toc-list a:hover { background: var(--light); color: var(--blue); }
+  .toc-list .dot {
+    width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+  }
+
+  /* ── MAIN CONTENT ── */
+  .main { flex: 1; min-width: 0; }
+
+  /* ── SECTION ── */
+  .section { margin-bottom: 56px; }
+  .section-header {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 28px; padding-bottom: 16px;
+    border-bottom: 2px solid var(--border);
+  }
+  .section-num {
+    width: 36px; height: 36px;
+    background: var(--navy); color: var(--cyan);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 8px; flex-shrink: 0;
+  }
+  .section-title { font-size: 1.25rem; font-weight: 700; color: var(--navy); }
+  .section-sub { font-size: 12px; color: var(--gray); margin-top: 2px; }
+
+  /* ── PHASE BLOCK ── */
+  .phase {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .phase-header {
+    padding: 16px 20px;
+    display: flex; align-items: center; gap: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .phase-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+  .phase-title { font-weight: 700; font-size: 0.95rem; }
+  .phase-badge {
+    margin-left: auto; font-size: 10px; font-weight: 600;
+    padding: 2px 10px; border-radius: 20px; letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .badge-setup   { background: #EEF2FF; color: var(--purple); }
+  .badge-code    { background: #ECFDF5; color: var(--green); }
+  .badge-run     { background: #FFF7ED; color: #EA580C; }
+  .badge-theory  { background: #F0F4FF; color: var(--blue); }
+  .phase-body { padding: 20px; }
+
+  /* ── STEP LIST ── */
+  .steps { list-style: none; }
+  .steps li {
+    display: flex; gap: 14px;
+    padding: 10px 0;
+    border-bottom: 1px dashed var(--border);
+  }
+  .steps li:last-child { border-bottom: none; }
+  .step-num {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--light); color: var(--blue);
+    font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 2px;
+  }
+  .step-content { flex: 1; }
+  .step-content strong { display: block; font-size: 13.5px; color: var(--navy); margin-bottom: 3px; }
+  .step-content p { font-size: 12.5px; color: var(--gray); }
+
+  /* ── CODE BLOCK ── */
+  .code-wrap { margin: 14px 0; border-radius: 10px; overflow: hidden; }
+  .code-header {
+    background: #1A2940; padding: 8px 16px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .code-lang {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; color: var(--cyan); letter-spacing: 1px; text-transform: uppercase;
+  }
+  .code-file { font-size: 10px; color: var(--gray); font-family: 'IBM Plex Mono', monospace; }
+  pre {
+    background: var(--code-bg); padding: 18px 20px;
+    overflow-x: auto; font-size: 12.5px; line-height: 1.6;
+  }
+  code {
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--code-text);
+  }
+  .cm  { color: #5C7A9A; } /* comment */
+  .ck  { color: #7EC8E3; } /* keyword */
+  .cs  { color: #A8D8A8; } /* string */
+  .cn  { color: #FFCC80; } /* number/name */
+  .cf  { color: #FFB3BA; } /* function */
+  .cp  { color: #E8C4FF; } /* param */
+
+  /* ── INLINE CODE ── */
+  .ic {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px; background: var(--light);
+    color: var(--blue); padding: 1px 6px; border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+
+  /* ── CALLOUT ── */
+  .callout {
+    border-radius: 10px; padding: 14px 18px;
+    margin: 16px 0; display: flex; gap: 12px; align-items: flex-start;
+    font-size: 13px;
+  }
+  .callout-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .callout.info    { background: #EFF6FF; border-left: 3px solid var(--blue); }
+  .callout.warn    { background: #FFFBEB; border-left: 3px solid var(--gold); }
+  .callout.tip     { background: #ECFDF5; border-left: 3px solid var(--green); }
+  .callout.theory  { background: #F5F3FF; border-left: 3px solid var(--purple); }
+
+  /* ── TABLE ── */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 16px 0; }
+  th { background: var(--navy); color: var(--white); padding: 10px 14px; text-align: left; font-size: 11px; letter-spacing: 0.5px; }
+  td { padding: 9px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: var(--light); }
+  td code { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--blue); }
+
+  /* ── FILE TREE ── */
+  .file-tree {
+    background: var(--code-bg); border-radius: 10px;
+    padding: 18px 20px; font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px; line-height: 2; color: #A8C4E8;
+  }
+  .ft-dir { color: var(--cyan); }
+  .ft-file { color: #B8D4F0; }
+  .ft-py  { color: #A8D8A8; }
+  .ft-csv { color: #FFCC80; }
+  .ft-txt { color: #FFB3BA; }
+
+  /* ── PIPELINE DIAGRAM ── */
+  .pipeline {
+    display: flex; align-items: center; gap: 0;
+    overflow-x: auto; padding: 20px 0; margin: 16px 0;
+  }
+  .pipe-box {
+    background: var(--white); border: 1.5px solid var(--border);
+    border-radius: 8px; padding: 10px 14px;
+    text-align: center; min-width: 130px; flex-shrink: 0;
+  }
+  .pipe-box .icon { font-size: 20px; margin-bottom: 4px; }
+  .pipe-box .label { font-size: 11px; font-weight: 700; color: var(--navy); line-height: 1.3; }
+  .pipe-box .sublabel { font-size: 10px; color: var(--gray); margin-top: 2px; }
+  .pipe-arrow { color: var(--cyan); font-size: 20px; padding: 0 6px; flex-shrink: 0; }
+  .pipe-box.active { border-color: var(--cyan); background: rgba(0,180,216,0.06); }
+
+  /* ── EXERCISE BOX ── */
+  .exercise {
+    background: linear-gradient(135deg, #0A1628 0%, #0D1F3C 100%);
+    border-radius: 12px; padding: 24px;
+    color: var(--white); margin: 20px 0;
+  }
+  .exercise h4 { color: var(--gold); font-size: 0.95rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .exercise p, .exercise li { font-size: 13px; color: #A8C4E8; }
+  .exercise ul { padding-left: 18px; margin: 8px 0; }
+  .exercise li { margin-bottom: 4px; }
+  .exercise .question {
+    background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.3);
+    border-radius: 8px; padding: 12px 16px; margin-top: 14px;
+    color: var(--gold); font-size: 13px; font-weight: 600;
+  }
+
+  /* ── COMPARISON CARDS ── */
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  .compare-card { border-radius: 10px; padding: 16px; }
+  .compare-card h5 { font-size: 13px; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .compare-card ul { list-style: none; font-size: 12.5px; }
+  .compare-card li { padding: 4px 0; border-bottom: 1px dashed rgba(0,0,0,0.07); }
+  .compare-card li:last-child { border-bottom: none; }
+  .card-bad  { background: #FEF2F2; border: 1.5px solid #FECACA; }
+  .card-bad h5  { color: var(--red); }
+  .card-good { background: #ECFDF5; border: 1.5px solid #A7F3D0; }
+  .card-good h5 { color: #059669; }
+
+  /* ── CHECKLIST ── */
+  .checklist { list-style: none; }
+  .checklist li {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .chk { width: 18px; height: 18px; border: 2px solid var(--border); border-radius: 4px; flex-shrink: 0; margin-top: 1px; }
+
+  /* ── OUTPUT PREVIEW ── */
+  .output-preview {
+    background: #F8F9FA; border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px 18px; font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px; line-height: 1.7; color: #334155; margin: 12px 0;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .layout  { padding: 24px 16px; }
+    .compare { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════ HERO ═══════════════════════ -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">🎓 MIT PE × Quanskill Bootcamp · Lab Handbook</div>
+    <h1>AI in <span>Digital Finance</span><br>& Fintech — Hướng dẫn Thực nghiệm</h1>
+    <p>Cấu trúc từng bước để cài đặt, code và chạy trên VS Code local (Win Laptop / macBook). Bám sát kịch bản bài báo cáo 16 slides — từ lý thuyết đến sản phẩm AI chạy được.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item"><span class="label">Thời lượng Lab</span><span class="val">60 min lý thuyết + 60 min thực hành</span></div>
+      <div class="hero-meta-item"><span class="label">Môi trường</span><span class="val">macOS · Python 3.11+ · VS Code</span></div>
+      <div class="hero-meta-item"><span class="label">Kịch bản chính</span><span class="val">Lab A: ML Credit Risk · Lab B: AI Agent</span></div>
+      <div class="hero-meta-item"><span class="label">Khung lý thuyết</span><span class="val">DBS ALAN · Bunq Finn · Agentic Pipeline</span></div>
+    </div>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+</div>
+
+<!-- ═══════════════════════ BODY ═══════════════════════ -->
+<div class="layout">
+
+<!-- ── Sidebar TOC ── -->
+<nav class="sidebar">
+  <div class="toc-label">Nội dung</div>
+  <ul class="toc-list">
+    <li><a href="#s0"><span class="dot" style="background:#8B5CF6"></span>Tổng quan kiến trúc</a></li>
+    <li><a href="#s1"><span class="dot" style="background:#1565C0"></span>Phase 0 — Cài đặt môi trường</a></li>
+    <li><a href="#s2"><span class="dot" style="background:#10B981"></span>Phase 1 — Cấu trúc dự án</a></li>
+    <li><a href="#s3"><span class="dot" style="background:#F59E0B"></span>Phase 2 — Knowledge Base</a></li>
+    <li><a href="#s4"><span class="dot" style="background:#EF4444"></span>Phase 3 — ML Budget Engine</a></li>
+    <li><a href="#s5"><span class="dot" style="background:#00B4D8"></span>Phase 4 — Explainer + FLAN</a></li>
+    <li><a href="#s6"><span class="dot" style="background:#8B5CF6"></span>Phase 5 — FastAPI Backend</a></li>
+    <li><a href="#s7"><span class="dot" style="background:#10B981"></span>Phase 6 — Gradio Frontend</a></li>
+    <li><a href="#s8"><span class="dot" style="background:#F59E0B"></span>Lab A — Credit Risk ML</a></li>
+    <li><a href="#s9"><span class="dot" style="background:#EF4444"></span>Lab B — AI Agent</a></li>
+    <li><a href="#s10"><span class="dot" style="background:#00B4D8"></span>Mở rộng & Capstone</a></li>
+  </ul>
+</nav>
+
+<!-- ── Main ── -->
+<main class="main">
+
+<!-- ════════════════════ SECTION 0 — ARCHITECTURE ════════════════════ -->
+<section class="section" id="s0">
+  <div class="section-header">
+    <div class="section-num">00</div>
+    <div>
+      <div class="section-title">Tổng quan Kiến trúc — Chatbot vs AI Agent</div>
+      <div class="section-sub">Slide 5 · Lý thuyết nền tảng trước khi code</div>
+    </div>
+  </div>
+
+  <div class="callout theory">
+    <div class="callout-icon">🧠</div>
+    <div><strong>Nguyên lý cốt lõi (Slide 5):</strong> Chatbot chỉ là User → LLM → Answer. AI Agent thật sự là một pipeline đa lớp. Mọi code trong lab này đều hiện thực hóa pipeline đó.</div>
+  </div>
+
+  <div class="compare">
+    <div class="compare-card card-bad">
+      <h5>❌ Chatbot (đơn giản)</h5>
+      <ul>
+        <li>User Input → LLM → Answer</li>
+        <li>Không có memory giữa các lần hỏi</li>
+        <li>Không dùng được công cụ bên ngoài</li>
+        <li>Không có reasoning chain</li>
+        <li>Ví dụ: ChatGPT không có plugin</li>
+      </ul>
+    </div>
+    <div class="compare-card card-good">
+      <h5>✅ AI Agent (đa lớp)</h5>
+      <ul>
+        <li>Retrieval (FAISS/TF-IDF) → Knowledge</li>
+        <li>Reasoning (LLM Chain) → Logic</li>
+        <li>Prediction (RandomForest) → Numbers</li>
+        <li>Memory (JSON/DB) → Context</li>
+        <li>LLM Explainer → Human output</li>
+      </ul>
+    </div>
+  </div>
+
+  <p style="font-size:13px;color:var(--gray);margin-bottom:16px;font-weight:600">Pipeline đầy đủ chúng ta sẽ build (Slides 11–13):</p>
+  <div class="pipeline">
+    <div class="pipe-box active">
+      <div class="icon">📝</div>
+      <div class="label">User Input</div>
+      <div class="sublabel">Issue description</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-box">
+      <div class="icon">🔍</div>
+      <div class="label">Retrieval</div>
+      <div class="sublabel">TF-IDF / FAISS</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-box">
+      <div class="icon">🤖</div>
+      <div class="label">ML Prediction</div>
+      <div class="sublabel">RandomForest</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-box">
+      <div class="icon">💾</div>
+      <div class="label">Memory</div>
+      <div class="sublabel">Session log</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-box active">
+      <div class="icon">✍️</div>
+      <div class="label">LLM Explainer</div>
+      <div class="sublabel">FLAN-T5</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-box">
+      <div class="icon">📊</div>
+      <div class="label">Gradio UI</div>
+      <div class="sublabel">Charts + Report</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ SECTION 1 — SETUP ════════════════════ -->
+<section class="section" id="s1">
+  <div class="section-header">
+    <div class="section-num">01</div>
+    <div>
+      <div class="section-title">Phase 0 — Cài đặt Môi trường (macBook)</div>
+      <div class="section-sub">Một lần duy nhất · ~10 phút · Yêu cầu: macOS 12+, VS Code</div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-icon" style="background:#EEF2FF">🍺</div>
+      <div>
+        <div class="phase-title">Bước 0.1 — Homebrew + Python 3.11</div>
+        <div style="font-size:11px;color:var(--gray)">Terminal → mở bằng Cmd+Space → gõ "Terminal"</div>
+      </div>
+      <span class="phase-badge badge-setup">Setup</span>
+    </div>
+    <div class="phase-body">
+      <div class="code-wrap">
+        <div class="code-header">
+          <span class="code-lang">bash — Terminal</span>
+          <span class="code-file">macOS Terminal</span>
+        </div>
+        <pre><code><span class="cm"># 1. Cài Homebrew nếu chưa có</span>
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+<span class="cm"># 2. Cài Python 3.11</span>
+brew install python@3.11
+
+<span class="cm"># 3. Kiểm tra phiên bản</span>
+python3.11 --version   <span class="cm"># phải ra: Python 3.11.x</span>
+
+<span class="cm"># 4. Cài VS Code Extensions (chạy từ VS Code terminal)</span>
+code --install-extension ms-python.python
+code --install-extension ms-python.vscode-pylance</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-icon" style="background:#ECFDF5">📦</div>
+      <div>
+        <div class="phase-title">Bước 0.2 — Tạo Virtual Environment</div>
+        <div style="font-size:11px;color:var(--gray)">Bắt buộc! Tránh conflict với hệ thống</div>
+      </div>
+      <span class="phase-badge badge-setup">Setup</span>
+    </div>
+    <div class="phase-body">
+      <div class="code-wrap">
+        <div class="code-header">
+          <span class="code-lang">bash — Terminal</span>
+          <span class="code-file">~/Desktop hoặc Documents</span>
+        </div>
+        <pre><code><span class="cm"># Tạo thư mục dự án</span>
+mkdir -p ~/projects/fintech_ai_agent
+cd ~/projects/fintech_ai_agent
+
+<span class="cm"># Tạo virtual env</span>
+python3.11 -m venv .venv
+
+<span class="cm"># Kích hoạt venv (phải làm mỗi lần mở terminal mới)</span>
+source .venv/bin/activate
+
+<span class="cm"># Dấu hiệu thành công: terminal sẽ hiện (.venv) ở đầu dòng</span>
+<span class="cm"># (.venv) user@MacBook ~/projects/fintech_ai_agent %</span>
+
+<span class="cm"># Upgrade pip</span>
+pip install --upgrade pip</code></pre>
+      </div>
+
+      <div class="callout tip">
+        <div class="callout-icon">💡</div>
+        <div><strong>VS Code tip:</strong> Mở thư mục <span class="ic">fintech_ai_agent</span> trong VS Code (<span class="ic">code .</span>), sau đó chọn Python interpreter là <span class="ic">.venv/bin/python3.11</span> (Cmd+Shift+P → "Python: Select Interpreter").</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-icon" style="background:#FFF7ED">⚡</div>
+      <div>
+        <div class="phase-title">Bước 0.3 — Cài tất cả thư viện</div>
+      </div>
+      <span class="phase-badge badge-setup">Setup</span>
+    </div>
+    <div class="phase-body">
+      <div class="code-wrap">
+        <div class="code-header">
+          <span class="code-lang">bash — VS Code Terminal</span>
+          <span class="code-file">requirements.txt</span>
+        </div>
+        <pre><code><span class="cm"># Tạo file requirements.txt</span>
+cat &gt; requirements.txt &lt;&lt; 'EOF'
+scikit-learn==1.4.2
+pandas==2.2.2
+numpy==1.26.4
+gradio==4.44.0
+plotly==5.22.0
+fastapi==0.111.0
+uvicorn==0.30.1
+transformers==4.42.4
+sentencepiece==0.2.0
+faiss-cpu==1.8.0
+sentence-transformers==3.0.1
+httpx==0.27.0
+EOF
+
+<span class="cm"># Cài tất cả</span>
+pip install -r requirements.txt
+
+<span class="cm"># Kiểm tra</span>
+python -c "import sklearn, gradio, fastapi, transformers, plotly; print('All OK')"</code></pre>
+      </div>
+
+      <div class="callout warn">
+        <div class="callout-icon">⚠️</div>
+        <div><strong>macOS M1/M2/M3 (Apple Silicon):</strong> FAISS cài khác. Dùng: <span class="ic">pip install faiss-cpu --no-binary faiss-cpu</span>. Nếu lỗi, thay bằng <span class="ic">pip install hnswlib</span> và code sẽ fallback tự động.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ SECTION 2 — PROJECT STRUCTURE ════════════════════ -->
+<section class="section" id="s2">
+  <div class="section-header">
+    <div class="section-num">02</div>
+    <div>
+      <div class="section-title">Phase 1 — Cấu trúc Dự án</div>
+      <div class="section-sub">Tạo tất cả file/thư mục trước khi code</div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-icon" style="background:#F5F3FF">📁</div>
+      <div><div class="phase-title">Tạo cấu trúc thư mục hoàn chỉnh</div></div>
+      <span class="phase-badge badge-setup">Setup</span>
+    </div>
+    <div class="phase-body">
+      <div class="code-wrap">
+        <div class="code-header">
+          <span class="code-lang">bash</span>
+        </div>
+        <pre><code><span class="cm"># Chạy từ ~/projects/fintech_ai_agent</span>
+mkdir -p core data storage
+
+<span class="cm"># Tạo các file rỗng</span>
+touch core/__init__.py
+touch core/database.py
+touch core/predictor.py
+touch core/explainer.py
+touch core/memory.py
+touch app_backend.py
+touch app_api.py
+touch app_frontend.py
+
+<span class="cm"># Kiểm tra cấu trúc</span>
+find . -not -path './.venv/*' -not -path './__pycache__/*' | sort</code></pre>
+      </div>
+
+      <div class="file-tree">
+<span class="ft-dir">fintech_ai_agent/</span><br>
+├── <span class="ft-dir">core/</span><br>
+│   ├── <span class="ft-py">__init__.py</span><br>
+│   ├── <span class="ft-py">database.py</span>         <span class="cm">← Semantic Knowledge Base (TF-IDF + FAISS)</span><br>
+│   ├── <span class="ft-py">predictor.py</span>        <span class="cm">← RandomForest ML Budget Engine</span><br>
+│   ├── <span class="ft-py">explainer.py</span>        <span class="cm">← Deterministic + FLAN-T5 LLM Layer</span><br>
+│   └── <span class="ft-py">memory.py</span>           <span class="cm">← Session memory persistence</span><br>
+├── <span class="ft-dir">data/</span><br>
+│   ├── <span class="ft-csv">enterprise_knowledge.csv</span>   <span class="cm">← Knowledge base (4 patterns)</span><br>
+│   └── <span class="ft-csv">project_cost_data.csv</span>      <span class="cm">← ML training data</span><br>
+├── <span class="ft-dir">storage/</span>               <span class="cm">← Session logs (auto-created)</span><br>
+├── <span class="ft-py">app_backend.py</span>      <span class="cm">← Orchestrator pipeline</span><br>
+├── <span class="ft-py">app_api.py</span>          <span class="cm">← FastAPI REST server (port 8000)</span><br>
+├── <span class="ft-py">app_frontend.py</span>     <span class="cm">← Gradio UI (port 7860)</span><br>
+└── <span class="ft-txt">requirements.txt</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-icon" style="background:#FFF7ED">📊</div>
+      <div><div class="phase-title">Tạo CSV Datasets</div></div>
+      <span class="phase-badge badge-code">Code</span>
+    </div>
+    <div class="phase-body">
+      <div class="code-wrap">
+        <div class="code-header">
+          <span class="code-lang">bash</span>
+          <span class="code-file">data/enterprise_knowledge.csv</span>
+        </div>
+        <pre><code><span class="cm"># Tạo enterprise_knowledge.csv</span>
+cat &gt; data/enterprise_knowledge.csv &lt;&lt; 'EOF'
+issue_pattern,solution,department,urgency_level,recommended_action
+unauthorized financial variance detected in quarterly general ledger,Deploy Automated Reconciliation Agents to audit ledger transactions in real-time,Finance Advisor,high,Initiate immediate operational deep-dive audit and lock matching batch records
+latency spike and data desynchronization on core cloud ERP platform,Upgrade API gateway bandwidth allocation and establish Redis distributed caching layer,IT Copilot,high,Schedule immediate out-of-hours infrastructure maintenance and cluster scaling
+delays in calculating employees end-of-year performance KPIs and bonuses,Implement automated pipeline processing to stream real-time operational data into ERP,HR Bot,medium,Configure automated approvals workflows via central enterprise resource system
+acute shortage of senior automated QA software engineers for deployment,Outsource mid-term software engineering tasks or invoke internal cross-skilling program,Product Management,medium,Open vendor bidding for certified engineering subcontractors to meet project milestones
+EOF
+
+<span class="cm"># Tạo project_cost_data.csv</span>
+cat &gt; data/project_cost_data.csv &lt;&lt; 'EOF'
+team_size,duration_weeks,risk_level,region,estimated_cost
+5,4,1,northwest,12500
+12,8,3,southeast,45800
+8,6,2,northeast,23000
+20,12,3,southwest,89000
+4,2,1,southeast,8500
+10,10,2,northeast,29500
+15,14,3,southwest,71000
+7,5,2,northwest,18900
+25,16,3,northeast,112000
+3,2,1,southwest,6200
+EOF</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ SECTION 3 — DATABASE.PY ════════════════════ -->
+<section class="section" id="s3">
+  <div class="section-header">
+    <div class="section-num">03</div>
+    <div>
+      <div class="section-title">Phase 2 — Semantic Knowledge Base</div>
+      <div class="section-sub">core/database.py · Slide 3 · TF-IDF + cosine similarity (FAISS-compatible)</div>
+    </div>
+  </div>
+
+  <div class="callout theory">
+    <div class="callout-icon">📚</div>
+    <div><strong>Lý thuyết (Slide 3 & 13):</strong> Đây là layer "Retrieval" trong pipeline. Khi user nhập issue, ta encode thành vector rồi tìm pattern gần nhất trong knowledge base. DBS ADA dùng cùng nguyên lý này để map operational issue → department + action.</div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-icon" style="background:#ECFDF5">🔍</div>
+      <div><div class="phase-title">Mở core/database.py trong VS Code và paste code sau:</div></div>
+      <span class="phase-badge badge-code">Code</span>
+    </div>
+    <div class="phase-body">
+      <div class="code-wrap">
+        <div class="code-header">
+          <span class="code-lang">python</span>
+          <span class="code-file">core/database.py</span>
+        </div>
+        <pre><code><span class="ck">"""
+Semantic Knowledge Base
+Layer 1 của AI Agent Pipeline (Slide 5, 12, 13)
+Dùng TF-IDF + cosine similarity để tìm pattern gần nhất.
+Tương đương FAISS vector search nhưng không cần GPU.
+"""</span>
+
+<span class="ck">import</span> os
+<span class="ck">import</span> pandas <span class="ck">as</span> pd
+<span class="ck">import</span> numpy <span class="ck">as</span> np
+<span class="ck">from</span> sklearn.feature_extraction.text <span class="ck">import</span> TfidfVectorizer
+<span class="ck">from</span> sklearn.metrics.pairwise <span class="ck">import</span> cosine_similarity
+
+<span class="cm"># ── Config ──────────────────────────────────────────────</span>
+DATA_PATH = os.path.join(os.path.dirname(__file__), <span class="cs">".."</span>, <span class="cs">"data"</span>, <span class="cs">"enterprise_knowledge.csv"</span>)
+
+
+<span class="ck">class</span> <span class="cf">EnterpriseKnowledgeBase</span>:
+    <span class="cs">"""
+    TF-IDF vector store — đại diện cho FAISS Knowledge Base (Slide 12).
+    Có thể nâng cấp sang FAISS hoặc sentence-transformers khi có GPU.
+    """</span>
+
+    <span class="ck">def</span> <span class="cf">__init__</span>(<span class="cp">self</span>):
+        <span class="cp">self</span>.df = pd.read_csv(DATA_PATH)
+        <span class="cp">self</span>.vectorizer = TfidfVectorizer(
+            ngram_range=(<span class="cn">1</span>, <span class="cn">2</span>),   <span class="cm"># unigram + bigram</span>
+            stop_words=<span class="cs">"english"</span>,
+            max_features=<span class="cn">5000</span>,
+        )
+        corpus = <span class="cp">self</span>.df[<span class="cs">"issue_pattern"</span>].tolist()
+        <span class="cp">self</span>.index_matrix = <span class="cp">self</span>.vectorizer.fit_transform(corpus)
+        print(<span class="cs">f"[KB] Loaded {len(corpus)} patterns from knowledge base"</span>)
+
+    <span class="ck">def</span> <span class="cf">search</span>(<span class="cp">self</span>, query: <span class="cn">str</span>, top_k: <span class="cn">int</span> = <span class="cn">1</span>) -&gt; <span class="cn">list</span>[<span class="cn">dict</span>]:
+        <span class="cs">"""
+        Tìm top_k pattern gần nhất với query.
+        Returns: list of dicts với confidence_score.
+        """</span>
+        q_vec = <span class="cp">self</span>.vectorizer.transform([query])
+        scores = cosine_similarity(q_vec, <span class="cp">self</span>.index_matrix)[<span class="cn">0</span>]
+        top_indices = np.argsort(scores)[::-<span class="cn">1</span>][:top_k]
+        results = []
+        <span class="ck">for</span> idx <span class="ck">in</span> top_indices:
+            row = <span class="cp">self</span>.df.iloc[idx]
+            results.append({
+                <span class="cs">"issue_pattern"</span>:     row[<span class="cs">"issue_pattern"</span>],
+                <span class="cs">"solution"</span>:         row[<span class="cs">"solution"</span>],
+                <span class="cs">"department"</span>:       row[<span class="cs">"department"</span>],
+                <span class="cs">"urgency_level"</span>:    row[<span class="cs">"urgency_level"</span>],
+                <span class="cs">"recommended_action"</span>: row[<span class="cs">"recommended_action"</span>],
+                <span class="cs">"confidence_score"</span>:  <span class="cn">float</span>(scores[idx]),
+            })
+        <span class="ck">return</span> results
+
+    <span class="ck">def</span> <span class="cf">get_all_issues</span>(<span class="cp">self</span>) -&gt; <span class="cn">list</span>[<span class="cn">str</span>]:
+        <span class="ck">return</span> <span class="cp">self</span>.df[<span class="cs">"issue_pattern"</span>].tolist()
+
+    <span class="ck">def</span> <span class="cf">get_stats</span>(<span class="cp">self</span>) -&gt; <span class="cn">dict</span>:
+        <span class="ck">return</span> {
+            <span class="cs">"total_patterns"</span>: <span class="cn">len</span>(<span class="cp">self</span>.df),
+            <span class="cs">"departments"</span>:    <span class="cp">self</span>.df[<span class="cs">"department"</span>].nunique(),
+            <span class="cs">"urgency_distribution"</span>: <span class="cp">self</span>.df[<span class="cs">"urgency_level"</span>].value_counts().to_dict(),
+        }
+
+
+<span class="cm"># ── Quick test ──────────────────────────────────────────</span>
+<span class="ck">if</span> __name__ == <span class="cs">"__main__"</span>:
+    kb = EnterpriseKnowledgeBase()
+    results = kb.search(<span class="cs">"KPI performance delays for employees"</span>)
+    <span class="ck">for</span> r <span class="ck">in</span> results:
+        print(<span class="cs">f"Dept: {r['department']}"</span>)
+        print(<span class="cs">f"Confidence: {r['confidence_score']:.2%}"</span>)
+        print(<span class="cs">f"Action: {r['recommended_action']}"</span>)</code></pre>
+      </div>
+
+      <div class="callout tip">
+        <div class="callout-icon">▶️</div>
+        <div><strong>Test ngay:</strong> Trong VS Code Terminal, chạy <span class="ic">python core/database.py</span>. Kết quả mong đợi: Dept = HR Bot, Confidence > 90%.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ SECTION 4 — PREDICTOR.PY ════════════════════ -->
+<section class="section" id="s4">
+  <div class="section-header">
+    <div class="section-num">04</div>
+    <div>
+      <div class="section-title">Phase 3 — RandomForest Budget Engine</div>
+      <div class="section-sub">core/predictor.py · Slide 11 · Lab A kịch bản chính</div>
+    </div>
+  </div>
+
+  <div class="callout theory">
+    <div class="callout-icon">🌲</div>
+    <div><strong>Lý thuyết (Slide 11 — Lab A):</strong> RandomForest = 100 cây quyết định bỏ phiếu → output trung bình. DBS dùng gradient-boosting tương tự trong hệ thống ALAN để score SME loan applications. Đây chính là kịch bản Lab A: "BMI vs Smoker — cái nào tăng cost nhiều hơn?"</div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-icon" style="background:#ECFDF5">🌲</div>
+      <div><div class="phase-title">core/predictor.py — ML Budget Engine hoàn chỉnh</div></div>
+      <span class="phase-badge badge-code">Code</span>
+    </div>
+    <div class="phase-body">
+      <div class="code-wrap">
+        <div class="code-header">
+          <span class="code-lang">python</span>
+          <span class="code-file">core/predictor.py</span>
+        </div>
+        <pre><code><span class="ck">"""
+Predictive Budget Engine — Layer 3 của AI Agent Pipeline
+RandomForestRegressor: predict deployment cost từ project parameters.
+Tương đương DBS ALAN credit scoring engine (Slide 8, 11, 13).
+"""</span>
+
+<span class="ck">import</span> os
+<span class="ck">import</span> numpy <span class="ck">as</span> np
+<span class="ck">import</span> pandas <span class="ck">as</span> pd
+<span class="ck">from</span> sklearn.ensemble <span class="ck">import</span> RandomForestRegressor
+<span class="ck">from</span> sklearn.preprocessing <span class="ck">import</span> LabelEncoder
+<span class="ck">from</span> sklearn.metrics <span class="ck">import</span> r2_score
+
+DATA_PATH = os.path.join(os.path.dirname(__file__), <span class="cs">".."</span>, <span class="cs">"data"</span>, <span class="cs">"project_cost_data.csv"</span>)
+RISK_MAP  = {<span class="cs">"low"</span>: <span class="cn">1</span>, <span class="cs">"medium"</span>: <span class="cn">2</span>, <span class="cs">"high"</span>: <span class="cn">3</span>}
+REGIONS   = [<span class="cs">"northeast"</span>, <span class="cs">"northwest"</span>, <span class="cs">"southeast"</span>, <span class="cs">"southwest"</span>]
+
+
+<span class="ck">class</span> <span class="cf">BudgetPredictor</span>:
+    <span class="cs">"""
+    RandomForest với 200 trees.
+    Input:  team_size, duration_weeks, risk_level (str), region (str)
+    Output: estimated_cost + 95% confidence interval từ tree variance
+    """</span>
+
+    <span class="ck">def</span> <span class="cf">__init__</span>(<span class="cp">self</span>):
+        df = pd.read_csv(DATA_PATH)
+        <span class="cp">self</span>.le = LabelEncoder()
+        <span class="cp">self</span>.le.fit(REGIONS)
+
+        <span class="cm"># Build feature matrix (numpy array — no DataFrame warnings)</span>
+        X = np.column_stack([
+            df[<span class="cs">"team_size"</span>].values,
+            df[<span class="cs">"duration_weeks"</span>].values,
+            df[<span class="cs">"risk_level"</span>].values,
+            <span class="cp">self</span>.le.transform(df[<span class="cs">"region"</span>]),
+        ])
+        y = df[<span class="cs">"estimated_cost"</span>].values
+
+        <span class="cp">self</span>.rf = RandomForestRegressor(
+            n_estimators=<span class="cn">200</span>,
+            max_depth=<span class="cn">8</span>,
+            min_samples_leaf=<span class="cn">1</span>,
+            random_state=<span class="cn">42</span>,
+        )
+        <span class="cp">self</span>.rf.fit(X, y)
+
+        <span class="cm"># Feature importance (4 features)</span>
+        names = [<span class="cs">"team_size"</span>, <span class="cs">"duration_weeks"</span>, <span class="cs">"risk_level"</span>, <span class="cs">"region"</span>]
+        <span class="cp">self</span>.feature_importances = dict(zip(names, <span class="cp">self</span>.rf.feature_importances_.tolist()))
+
+        <span class="cm"># Model accuracy</span>
+        preds = <span class="cp">self</span>.rf.predict(X)
+        <span class="cp">self</span>.train_r2 = r2_score(y, preds)
+        print(<span class="cs">f"[ML] RandomForest trained — R²={self.train_r2:.3f}, trees=200"</span>)
+
+    <span class="ck">def</span> <span class="cf">_encode_input</span>(<span class="cp">self</span>, team_size, duration_weeks, risk_level, region):
+        risk_num   = RISK_MAP.get(risk_level.lower(), <span class="cn">2</span>)
+        region_low = region.lower()
+        <span class="ck">if</span> region_low <span class="ck">not in</span> REGIONS:
+            region_low = <span class="cs">"southeast"</span>
+        region_enc = <span class="cp">self</span>.le.transform([region_low])[<span class="cn">0</span>]
+        <span class="ck">return</span> np.array([[team_size, duration_weeks, risk_num, region_enc]])
+
+    <span class="ck">def</span> <span class="cf">predict</span>(<span class="cp">self</span>, team_size: <span class="cn">int</span>, duration_weeks: <span class="cn">int</span>,
+                risk_level: <span class="cn">str</span>, region: <span class="cn">str</span>) -&gt; <span class="cn">dict</span>:
+        <span class="cs">"""
+        Predict cost + 95% CI từ variance của 200 trees.
+        Đây là kỹ thuật Conformal Prediction đơn giản.
+        """</span>
+        X_pred = <span class="cp">self</span>._encode_input(team_size, duration_weeks, risk_level, region)
+
+        <span class="cm"># Collect predictions từ từng tree</span>
+        tree_preds = np.array([t.predict(X_pred)[<span class="cn">0</span>] <span class="ck">for</span> t <span class="ck">in</span> <span class="cp">self</span>.rf.estimators_])
+        mean_cost  = <span class="cn">float</span>(np.mean(tree_preds))
+        std_cost   = <span class="cn">float</span>(np.std(tree_preds))
+
+        <span class="ck">return</span> {
+            <span class="cs">"estimated_cost"</span>:   round(mean_cost, <span class="cn">2</span>),
+            <span class="cs">"confidence_low"</span>:   round(max(<span class="cn">0</span>, mean_cost - <span class="cn">1.96</span> * std_cost), <span class="cn">2</span>),
+            <span class="cs">"confidence_high"</span>:  round(mean_cost + <span class="cn">1.96</span> * std_cost, <span class="cn">2</span>),
+            <span class="cs">"std_dev"</span>:          round(std_cost, <span class="cn">2</span>),
+            <span class="cs">"model_accuracy"</span>:   round(<span class="cp">self</span>.train_r2 * <span class="cn">100</span>, <span class="cn">2</span>),
+        }
+
+    <span class="ck">def</span> <span class="cf">get_cost_breakdown</span>(<span class="cp">self</span>, team_size, duration_weeks, risk_level, region) -&gt; <span class="cn">dict</span>:
+        <span class="cs">"""Phân bổ chi phí theo hạng mục (heuristic allocation)."""</span>
+        result = <span class="cp">self</span>.predict(team_size, duration_weeks, risk_level, region)
+        total  = result[<span class="cs">"estimated_cost"</span>]
+        risk_n = RISK_MAP.get(risk_level.lower(), <span class="cn">2</span>)
+        risk_pct = <span class="cn">0.08</span> * risk_n / <span class="cn">3</span>
+        <span class="ck">return</span> {
+            <span class="cs">"total"</span>:          total,
+            <span class="cs">"labor"</span>:          round(total * <span class="cn">0.55</span>, <span class="cn">2</span>),
+            <span class="cs">"infrastructure"</span>: round(total * <span class="cn">0.20</span>, <span class="cn">2</span>),
+            <span class="cs">"risk_buffer"</span>:    round(total * risk_pct, <span class="cn">2</span>),
+            <span class="cs">"overhead"</span>:       round(total * (<span class="cn">1</span> - <span class="cn">0.55</span> - <span class="cn">0.20</span> - risk_pct), <span class="cn">2</span>),
+        }
+
+    <span class="ck">def</span> <span class="cf">sensitivity_analysis</span>(<span class="cp">self</span>, base_team, base_weeks, base_risk, base_region) -&gt; <span class="cn">list</span>[<span class="cn">dict</span>]:
+        <span class="cs">"""
+        Lab A Question: "BMI vs Smoker — which causes larger cost increase?"
+        Tương đương: "team_size vs risk — cái nào quan trọng hơn?"
+        """</span>
+        results = []
+        <span class="ck">for</span> ts <span class="ck">in</span> [max(<span class="cn">1</span>, base_team - <span class="cn">4</span>), base_team, base_team + <span class="cn">4</span>, base_team + <span class="cn">8</span>]:
+            c = <span class="cp">self</span>.predict(ts, base_weeks, base_risk, base_region)[<span class="cs">"estimated_cost"</span>]
+            results.append({<span class="cs">"variable"</span>: <span class="cs">f"Team {ts}"</span>, <span class="cs">"cost"</span>: c, <span class="cs">"category"</span>: <span class="cs">"team_size"</span>})
+        <span class="ck">for</span> wk <span class="ck">in</span> [max(<span class="cn">1</span>, base_weeks - <span class="cn">2</span>), base_weeks, base_weeks + <span class="cn">2</span>, base_weeks + <span class="cn">4</span>]:
+            c = <span class="cp">self</span>.predict(base_team, wk, base_risk, base_region)[<span class="cs">"estimated_cost"</span>]
+            results.append({<span class="cs">"variable"</span>: <span class="cs">f"{wk}w"</span>, <span class="cs">"cost"</span>: c, <span class="cs">"category"</span>: <span class="cs">"duration"</span>})
+        <span class="ck">for</span> rl <span class="ck">in</span> [<span class="cs">"low"</span>, <span class="cs">"medium"</span>, <span class="cs">"high"</span>]:
+            c = <span class="cp">self</span>.predict(base_team, base_weeks, rl, base_region)[<span class="cs">"estimated_cost"</span>]
+            results.append({<span class="cs">"variable"</span>: rl.capitalize(), <span class="cs">"cost"</span>: c, <span class="cs">"category"</span>: <span class="cs">"risk"</span>})
+        <span class="ck">return</span> results
+
+
+<span class="cm"># ── Quick test — Lab A scenario ───────────────────────</span>
+<span class="ck">if</span> __name__ == <span class="cs">"__main__"</span>:
+    pred = BudgetPredictor()
+
+    <span class="cm"># Simulate Lab A: Base profile</span>
+    base = pred.predict(<span class="cn">12</span>, <span class="cn">8</span>, <span class="cs">"medium"</span>, <span class="cs">"southwest"</span>)
+    print(<span class="cs">f"\n--- Base Profile ---"</span>)
+    print(<span class="cs">f"Estimated Cost: ${base['estimated_cost']:,.2f}"</span>)
+    print(<span class="cs">f"95% CI: ${base['confidence_low']:,.0f} – ${base['confidence_high']:,.0f}"</span>)
+    print(<span class="cs">f"Model R²: {base['model_accuracy']}%"</span>)
+
+    <span class="cm"># Lab A Question: team_size +4 vs risk high</span>
+    more_team  = pred.predict(<span class="cn">16</span>, <span class="cn">8</span>, <span class="cs">"medium"</span>, <span class="cs">"southwest"</span>)[<span class="cs">"estimated_cost"</span>]
+    high_risk  = pred.predict(<span class="cn">12</span>, <span class="cn">8</span>, <span class="cs">"high"</span>, <span class="cs">"southwest"</span>)[<span class="cs">"estimated_cost"</span>]
+    print(<span class="cs">f"\n--- Lab A Sensitivity ---"</span>)
+    print(<span class="cs">f"Team +4:   ${more_team:,.0f} (delta ${more_team - base['estimated_cost']:+,.0f})"</span>)
+    print(<span class="cs">f"Risk high: ${high_risk:,.0f} (delta ${high_risk - base['estimated_cost']:+,.0f})"</span>)
+    print(<span class="cs">f"Feature importances: {pred.feature_importances}"</span>)</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ SECTION 5 — EXPLAINER ════════════════════ -->
+<section class="section" id="s5">
+  <div class="section-header">
+    <div class="section-num">05</div>
+    <div>
+      <div class="section-title">Phase 4 — Executive Explainer + FLAN-T5</div>
+      <div class="section-sub">core/explainer.py · Slide 7 · Prompt Engineering in practice</div>
+    </div>
+  </div>
+
+  <div class="callout theory">
+    <div class="callout-icon">✍️</div>
+    <div><strong>Lý thuyết (Slides 6–7, 12):</strong> Đây là layer "LLM Explainer" — bunq Finn dùng GenAI để rewrite raw ML output thành ngôn ngữ thân thiện cho user. Slides 7 dạy 6 kỹ thuật Prompt Engineering; trong code này ta áp dụng Role Prompting + Constrained Rewrite.</div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-icon" style="background:#F5F3FF">✍️</div>
+      <div><div class="phase-title">core/explainer.py — Deterministic + FLAN-T5 layer</div></div>
+      <span class="phase-badge badge-code">Code</span>
+    </div>
+    <div class="phase-body">
+      <div class="code-wrap">
+        <div class="code-header">
+          <span class="code-lang">python</span>
+          <span class="code-file">core/explainer.py</span>
+        </div>
+        <pre><code><span class="ck">"""
+Executive Explainer Layer — Layer 5 của AI Agent Pipeline
+Slide 7 — Role Prompting + Constrained Rewrite (bunq Finn pattern)
+
+Chiến lược 2 lớp:
+1. Deterministic report: luôn nhanh, luôn đúng sự thật
+2. FLAN-T5 rewrite: load lazy, chỉ dùng khi user bật checkbox
+"""</span>
+
+<span class="ck">import</span> threading
+<span class="ck">from</span> datetime <span class="ck">import</span> datetime
+
+URGENCY_ICON = {<span class="cs">"high"</span>: <span class="cs">"🔴"</span>, <span class="cs">"medium"</span>: <span class="cs">"🟡"</span>, <span class="cs">"low"</span>: <span class="cs">"🟢"</span>}
+DEPT_ICON    = {
+    <span class="cs">"Finance Advisor"</span>:    <span class="cs">"💰"</span>,
+    <span class="cs">"IT Copilot"</span>:         <span class="cs">"⚙️"</span>,
+    <span class="cs">"HR Bot"</span>:             <span class="cs">"👥"</span>,
+    <span class="cs">"Product Management"</span>: <span class="cs">"📦"</span>,
+}
+
+<span class="cm"># ── FLAN-T5 lazy singleton ─────────────────────────────</span>
+_lock    = threading.Lock()
+_tok     = <span class="cn">None</span>
+_mdl     = <span class="cn">None</span>
+_loaded  = <span class="cn">False</span>
+_err_msg = <span class="cn">None</span>
+
+
+<span class="ck">def</span> <span class="cf">_load_flan</span>() -&gt; <span class="cn">bool</span>:
+    <span class="cs">"""Load FLAN-T5-Large một lần duy nhất (lazy loading pattern)."""</span>
+    <span class="ck">global</span> _tok, _mdl, _loaded, _err_msg
+    <span class="ck">if</span> _loaded:
+        <span class="ck">return</span> <span class="cn">True</span>
+    <span class="ck">try</span>:
+        <span class="ck">from</span> transformers <span class="ck">import</span> AutoTokenizer, AutoModelForSeq2SeqLM
+        print(<span class="cs">"[FLAN] Loading google/flan-t5-large … (first time ~60s)"</span>)
+        _tok = AutoTokenizer.from_pretrained(<span class="cs">"google/flan-t5-large"</span>)
+        _mdl = AutoModelForSeq2SeqLM.from_pretrained(<span class="cs">"google/flan-t5-large"</span>)
+        _loaded = <span class="cn">True</span>
+        print(<span class="cs">"[FLAN] ✅ Model ready"</span>)
+        <span class="ck">return</span> <span class="cn">True</span>
+    <span class="ck">except</span> <span class="cn">Exception</span> <span class="ck">as</span> e:
+        _err_msg = <span class="cn">str</span>(e)
+        print(<span class="cs">f"[FLAN] ❌ {e}"</span>)
+        <span class="ck">return</span> <span class="cn">False</span>
+
+
+<span class="ck">def</span> <span class="cf">_flan_rewrite</span>(text: <span class="cn">str</span>) -&gt; <span class="cn">str</span> | <span class="cn">None</span>:
+    <span class="cs">"""
+    Slide 7 — Constrained Rewrite + Role Prompting:
+    "You are a compliance officer… rewrite in plain English…"
+    """</span>
+    prompt = (
+        <span class="cs">"You are a senior compliance officer at a global bank. "</span>
+        <span class="cs">"Rewrite the following operational alert as a professional executive brief. "</span>
+        <span class="cs">"Rules: preserve all facts, no jargon, max 8 sentences, "</span>
+        <span class="cs">"end with: 'Please consult a licensed professional before acting.'\n\n"</span>
+        <span class="cs">f"Text:\n{text}"</span>
+    )
+    <span class="ck">with</span> _lock:
+        inputs = _tok(prompt, return_tensors=<span class="cs">"pt"</span>, truncation=<span class="cn">True</span>, max_length=<span class="cn">512</span>)
+        out    = _mdl.generate(**inputs, max_new_tokens=<span class="cn">280</span>, temperature=<span class="cn">0.3</span>, do_sample=<span class="cn">True</span>)
+        result = _tok.decode(out[<span class="cn">0</span>], skip_special_tokens=<span class="cn">True</span>).strip()
+    <span class="ck">return</span> result <span class="ck">if</span> <span class="cn">len</span>(result) &gt; <span class="cn">80</span> <span class="ck">else</span> <span class="cn">None</span>
+
+
+<span class="ck">class</span> <span class="cf">EnterpriseExplainer</span>:
+
+    <span class="ck">def</span> <span class="cf">__init__</span>(<span class="cp">self</span>):
+        <span class="cp">self</span>.query_log = []
+
+    <span class="ck">def</span> <span class="cf">build_structured</span>(<span class="cp">self</span>, business_name, issue_desc, kb_result, budget_result) -&gt; <span class="cn">str</span>:
+        <span class="cs">"""Layer 1: Deterministic report — luôn chính xác 100%."""</span>
+        dept     = kb_result.get(<span class="cs">"department"</span>, <span class="cs">"Operations"</span>)
+        urgency  = kb_result.get(<span class="cs">"urgency_level"</span>, <span class="cs">"medium"</span>)
+        solution = kb_result.get(<span class="cs">"solution"</span>, <span class="cs">"N/A"</span>)
+        action   = kb_result.get(<span class="cs">"recommended_action"</span>, <span class="cs">"N/A"</span>)
+        conf     = kb_result.get(<span class="cs">"confidence_score"</span>, <span class="cn">0.0</span>)
+        cost     = budget_result.get(<span class="cs">"estimated_cost"</span>, <span class="cn">0</span>)
+        accuracy = budget_result.get(<span class="cs">"model_accuracy"</span>, <span class="cn">0</span>)
+        ci_l     = budget_result.get(<span class="cs">"confidence_low"</span>, <span class="cn">0</span>)
+        ci_h     = budget_result.get(<span class="cs">"confidence_high"</span>, <span class="cn">0</span>)
+        ts       = datetime.now().strftime(<span class="cs">"%Y-%m-%d %H:%M"</span>)
+
+        report = (
+            <span class="cs">f"=== EXECUTIVE OPERATIONAL ANALYSIS REPORT ===\n"</span>
+            <span class="cs">f"Business: {business_name}\nGenerated: {ts}\n"</span>
+            <span class="cs">f"{'─'*50}\n\n"</span>
+            <span class="cs">f"{URGENCY_ICON.get(urgency,'🟡')} INCIDENT CLASSIFICATION\n"</span>
+            <span class="cs">f"- Issue:   {issue_desc}\n"</span>
+            <span class="cs">f"- Agent:   {DEPT_ICON.get(dept,'🏢')} {dept}\n"</span>
+            <span class="cs">f"- Alert:   {urgency.upper()}\n"</span>
+            <span class="cs">f"- Confidence: {conf*100:.1f}%\n\n"</span>
+            <span class="cs">f"RECOMMENDED DIGITAL SOLUTION\n{solution}\n\n"</span>
+            <span class="cs">f"IMMEDIATE ACTION\n{action}\n\n"</span>
+            <span class="cs">f"BUDGET PROJECTION (ML Engine — RandomForest)\n"</span>
+            <span class="cs">f"- Cost:    ${cost:,.2f} USD\n"</span>
+            <span class="cs">f"- 95% CI:  ${ci_l:,.0f} – ${ci_h:,.0f}\n"</span>
+            <span class="cs">f"- R²:      {accuracy:.1f}%\n\n"</span>
+            <span class="cs">f"{'─'*50}\n"</span>
+            <span class="cs">f"Note: Auto-generated per MIT PE Digital Transformation Framework."</span>
+        )
+        self.query_log.append({
+            <span class="cs">"ts"</span>: ts, <span class="cs">"business"</span>: business_name, <span class="cs">"dept"</span>: dept,
+            <span class="cs">"urgency"</span>: urgency, <span class="cs">"cost"</span>: cost, <span class="cs">"conf"</span>: conf,
+        })
+        <span class="ck">return</span> report
+
+    <span class="ck">def</span> <span class="cf">build_executive_brief</span>(
+        <span class="cp">self</span>, business_name, issue_desc, kb_result, budget_result, use_llm=<span class="cn">False</span>
+    ) -&gt; <span class="cn">tuple</span>[<span class="cn">str</span>, <span class="cn">str</span>]:
+        <span class="cs">"""
+        Returns (report_text, flan_status_message).
+        use_llm=False → deterministic only (fast)
+        use_llm=True  → try FLAN-T5 rewrite, fallback gracefully
+        """</span>
+        base = <span class="cp">self</span>.build_structured(business_name, issue_desc, kb_result, budget_result)
+
+        <span class="ck">if</span> <span class="ck">not</span> use_llm:
+            <span class="ck">return</span> base, <span class="cs">"FLAN-T5 not activated — using deterministic report"</span>
+
+        ok = _load_flan()
+        <span class="ck">if not</span> ok:
+            <span class="ck">return</span> base, <span class="cs">f"⚠️ FLAN load failed: {_err_msg}"</span>
+
+        <span class="ck">try</span>:
+            rewritten = _flan_rewrite(base)
+            <span class="ck">if</span> rewritten:
+                combined = (
+                    <span class="cs">f"[✅ FLAN-T5-Large — Enhanced Executive Brief]\n{'─'*50}\n"</span>
+                    <span class="cs">f"{rewritten}\n\n{'─'*50}\n"</span>
+                    <span class="cs">f"[Original Deterministic Report]\n{base}"</span>
+                )
+                <span class="ck">return</span> combined, <span class="cs">"✅ FLAN-T5-Large rewrite applied"</span>
+            <span class="ck">return</span> base, <span class="cs">"⚠️ FLAN output too short — fallback to deterministic"</span>
+        <span class="ck">except</span> <span class="cn">Exception</span> <span class="ck">as</span> e:
+            <span class="ck">return</span> base, <span class="cs">f"⚠️ FLAN error: {e}"</span>
+
+    <span class="ck">def</span> <span class="cf">format_api_log</span>(<span class="cp">self</span>, kb_result, budget_result) -&gt; <span class="cn">str</span>:
+        <span class="ck">return</span> (
+            <span class="cs">f"[Agent]: {kb_result.get('department','N/A')}\n"</span>
+            <span class="cs">f"[Pattern]: '{kb_result.get('issue_pattern','N/A')}'\n"</span>
+            <span class="cs">f"[Confidence]: {kb_result.get('confidence_score',0)*100:.2f}%\n"</span>
+            <span class="cs">f"[Action]: {kb_result.get('recommended_action','N/A')}\n"</span>
+            <span class="cs">f"[Budget]: ${budget_result.get('estimated_cost',0):,.2f} USD"</span>
+        )</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ SECTION 6 — BACKEND ════════════════════ -->
+<section class="section" id="s6">
+  <div class="section-header">
+    <div class="section-num">06</div>
+    <div>
+      <div class="section-title">Phase 5 — Orchestrator + FastAPI Backend</div>
+      <div class="section-sub">app_backend.py + app_api.py · Port 8000</div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-icon" style="background:#ECFDF5">⚙️</div>
+      <div><div class="phase-title">app_backend.py — Pipeline orchestrator</div></div>
+      <span class="phase-badge badge-code">Code</span>
+    </div>
+    <div class="phase-body">
+      <div class="code-wrap">
+        <div class="code-header">
+          <span class="code-lang">python</span>
+          <span class="code-file">app_backend.py</span>
+        </div>
+        <pre><code><span class="ck">"""
+Orchestrator: kết nối tất cả các layers thành 1 pipeline
+User Input → KB Search → ML Predict → Explainer → Result Dict
+"""</span>
+<span class="ck">import</span> sys, os
+sys.path.insert(<span class="cn">0</span>, os.path.dirname(__file__))
+
+<span class="ck">from</span> core.database  <span class="ck">import</span> EnterpriseKnowledgeBase
+<span class="ck">from</span> core.predictor <span class="ck">import</span> BudgetPredictor
+<span class="ck">from</span> core.explainer <span class="ck">import</span> EnterpriseExplainer
+
+<span class="cm"># Singleton instances (load once)</span>
+_kb = _pred = _exp = <span class="cn">None</span>
+
+<span class="ck">def</span> <span class="cf">_init</span>():
+    <span class="ck">global</span> _kb, _pred, _exp
+    <span class="ck">if</span> _kb <span class="ck">is None</span>:
+        _kb   = EnterpriseKnowledgeBase()
+        _pred = BudgetPredictor()
+        _exp  = EnterpriseExplainer()
+    <span class="ck">return</span> _kb, _pred, _exp
+
+
+<span class="ck">def</span> <span class="cf">run_analysis</span>(
+    business_name: <span class="cn">str</span>, admin_email: <span class="cn">str</span>,
+    team_size: <span class="cn">int</span>, duration_weeks: <span class="cn">int</span>,
+    risk_level: <span class="cn">str</span>, region: <span class="cn">str</span>,
+    issue_description: <span class="cn">str</span>,
+    use_llm: <span class="cn">bool</span> = <span class="cn">False</span>,
+) -&gt; <span class="cn">dict</span>:
+    kb, pred, exp = _init()
+
+    <span class="cm"># Layer 1: Semantic Retrieval</span>
+    kb_results = kb.search(issue_description, top_k=<span class="cn">1</span>)
+    kb_result  = kb_results[<span class="cn">0</span>] <span class="ck">if</span> kb_results <span class="ck">else</span> {
+        <span class="cs">"issue_pattern"</span>: issue_description,
+        <span class="cs">"solution"</span>: <span class="cs">"Manual review required."</span>,
+        <span class="cs">"department"</span>: <span class="cs">"Operations"</span>,
+        <span class="cs">"urgency_level"</span>: <span class="cs">"medium"</span>,
+        <span class="cs">"recommended_action"</span>: <span class="cs">"Escalate to management."</span>,
+        <span class="cs">"confidence_score"</span>: <span class="cn">0.0</span>,
+    }
+
+    <span class="cm"># Layer 2–3: ML Prediction + Breakdown</span>
+    budget_result  = pred.predict(team_size, duration_weeks, risk_level, region)
+    cost_breakdown = pred.get_cost_breakdown(team_size, duration_weeks, risk_level, region)
+    sensitivity    = pred.sensitivity_analysis(team_size, duration_weeks, risk_level, region)
+
+    <span class="cm"># Layer 4–5: Memory + Explainer</span>
+    executive_brief, flan_status = exp.build_executive_brief(
+        business_name, issue_description, kb_result, budget_result, use_llm
+    )
+    api_log = exp.format_api_log(kb_result, budget_result)
+
+    <span class="ck">return</span> {
+        <span class="cs">"executive_brief"</span>:    executive_brief,
+        <span class="cs">"flan_status"</span>:        flan_status,
+        <span class="cs">"api_log"</span>:            api_log,
+        <span class="cs">"kb_result"</span>:          kb_result,
+        <span class="cs">"budget_result"</span>:      budget_result,
+        <span class="cs">"cost_breakdown"</span>:     cost_breakdown,
+        <span class="cs">"sensitivity"</span>:        sensitivity,
+        <span class="cs">"feature_importances"</span>: pred.feature_importances,
+        <span class="cs">"kb_stats"</span>:           kb.get_stats(),
+    }
+
+<span class="ck">def</span> <span class="cf">get_kb_stats</span>(): kb, _, _ = _init(); <span class="ck">return</span> kb.get_stats()</code></pre>
+      </div>
+
+      <div class="code-wrap" style="margin-top:20px">
+        <div class="code-header">
+          <span class="code-lang">python</span>
+          <span class="code-file">app_api.py — FastAPI REST server</span>
+        </div>
+        <pre><code><span class="ck">from</span> fastapi <span class="ck">import</span> FastAPI
+<span class="ck">from</span> fastapi.middleware.cors <span class="ck">import</span> CORSMiddleware
+<span class="ck">from</span> pydantic <span class="ck">import</span> BaseModel
+<span class="ck">import</span> uvicorn
+<span class="ck">from</span> app_backend <span class="ck">import</span> run_analysis, get_kb_stats
+
+app = FastAPI(title=<span class="cs">"Enterprise AI Agent"</span>, version=<span class="cs">"2.0"</span>)
+app.add_middleware(CORSMiddleware, allow_origins=[<span class="cs">"*"</span>],
+                   allow_methods=[<span class="cs">"*"</span>], allow_headers=[<span class="cs">"*"</span>])
+
+<span class="ck">class</span> <span class="cf">AnalyzeRequest</span>(BaseModel):
+    business_name: <span class="cn">str</span>
+    admin_email: <span class="cn">str</span>
+    team_size: <span class="cn">int</span>    = <span class="cn">12</span>
+    duration_weeks: <span class="cn">int</span> = <span class="cn">8</span>
+    risk_level: <span class="cn">str</span>  = <span class="cs">"medium"</span>
+    region: <span class="cn">str</span>       = <span class="cs">"southwest"</span>
+    issue_description: <span class="cn">str</span>
+    use_llm: <span class="cn">bool</span>     = <span class="cn">False</span>
+
+@app.get(<span class="cs">"/api/v1/health"</span>)
+<span class="ck">def</span> <span class="cf">health</span>(): <span class="ck">return</span> {<span class="cs">"status"</span>: <span class="cs">"online"</span>}
+
+@app.post(<span class="cs">"/api/v1/analyze"</span>)
+<span class="ck">def</span> <span class="cf">analyze</span>(req: AnalyzeRequest):
+    <span class="ck">return</span> run_analysis(**req.dict())
+
+@app.get(<span class="cs">"/api/v1/kb-stats"</span>)
+<span class="ck">def</span> <span class="cf">kb_stats</span>(): <span class="ck">return</span> get_kb_stats()
+
+<span class="ck">if</span> __name__ == <span class="cs">"__main__"</span>:
+    <span class="cm"># Mở http://127.0.0.1:8000/docs để test API tương tác</span>
+    uvicorn.run(app, host=<span class="cs">"0.0.0.0"</span>, port=<span class="cn">8000</span>)</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ SECTION 7 — FRONTEND ════════════════════ -->
+<section class="section" id="s7">
+  <div class="section-header">
+    <div class="section-num">07</div>
+    <div>
+      <div class="section-title">Phase 6 — Gradio Frontend với Charts</div>
+      <div class="section-sub">app_frontend.py · Port 7860 · 6 loại biểu đồ Plotly</div>
+    </div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-icon" style="background:#FFF7ED">📊</div>
+      <div><div class="phase-title">Cấu trúc frontend — Gradio Blocks + Plotly</div></div>
+      <span class="phase-badge badge-code">Code</span>
+    </div>
+    <div class="phase-body">
+      <div class="code-wrap">
+        <div class="code-header">
+          <span class="code-lang">python</span>
+          <span class="code-file">app_frontend.py</span>
+        </div>
+        <pre><code><span class="ck">"""
+Gradio Frontend v2 — Bám sát reference UI (Slide 7 của báo cáo)
+Layout: Left inputs | Right outputs (Executive Text + ML Cost + API Log)
+Below: Chart selector dropdown + 6 Plotly charts
+Theme: 5 options bao gồm màu cam nổi bật như screenshot
+"""</span>
+
+<span class="ck">import</span> sys, os, json
+sys.path.insert(<span class="cn">0</span>, os.path.dirname(__file__))
+
+<span class="ck">import</span> gradio <span class="ck">as</span> gr
+<span class="ck">import</span> plotly.graph_objects <span class="ck">as</span> go
+<span class="ck">import</span> pandas <span class="ck">as</span> pd
+<span class="ck">import</span> numpy <span class="ck">as</span> np
+<span class="ck">from</span> app_backend <span class="ck">import</span> run_analysis, get_kb_stats
+
+PALETTES = {
+    <span class="cs">"🌊 Ocean Blue"</span>:  [<span class="cs">"#0EA5E9"</span>,<span class="cs">"#06B6D4"</span>,<span class="cs">"#3B82F6"</span>,<span class="cs">"#6366F1"</span>,<span class="cs">"#8B5CF6"</span>],
+    <span class="cs">"🟠 Fintech Orange"</span>: [<span class="cs">"#E85D04"</span>,<span class="cs">"#F59E0B"</span>,<span class="cs">"#DC2626"</span>,<span class="cs">"#7C3AED"</span>,<span class="cs">"#059669"</span>],
+    <span class="cs">"🌿 Forest Green"</span>: [<span class="cs">"#10B981"</span>,<span class="cs">"#34D399"</span>,<span class="cs">"#059669"</span>,<span class="cs">"#6EE7B7"</span>,<span class="cs">"#047857"</span>],
+    <span class="cs">"🌙 Midnight"</span>:    [<span class="cs">"#94A3B8"</span>,<span class="cs">"#64748B"</span>,<span class="cs">"#475569"</span>,<span class="cs">"#334155"</span>,<span class="cs">"#CBD5E1"</span>],
+    <span class="cs">"🪻 Lavender"</span>:    [<span class="cs">"#7C3AED"</span>,<span class="cs">"#A78BFA"</span>,<span class="cs">"#8B5CF6"</span>,<span class="cs">"#C4B5FD"</span>,<span class="cs">"#6D28D9"</span>],
+}
+
+CHART_LIST = [
+    <span class="cs">"📊 Cost Sensitivity — Bar"</span>,
+    <span class="cs">"🥧 Cost Breakdown — Pie"</span>,
+    <span class="cs">"🧠 Feature Importance — Horizontal Bar"</span>,
+    <span class="cs">"📈 Budget Confidence — Area"</span>,
+    <span class="cs">"🍩 Urgency Distribution — Donut"</span>,
+    <span class="cs">"🔵 Cost vs Team Size — Scatter"</span>,
+]
+
+session_history = []
+
+<span class="cm"># ── Chart builders (6 biểu đồ) ─────────────────────────</span>
+
+<span class="ck">def</span> <span class="cf">chart_sensitivity</span>(sensitivity, p):
+    cats = {<span class="cs">"team_size"</span>:<span class="cs">"Team Size"</span>, <span class="cs">"duration"</span>:<span class="cs">"Duration"</span>, <span class="cs">"risk"</span>:<span class="cs">"Risk Level"</span>}
+    fig = go.Figure()
+    <span class="ck">for</span> i, (key, label) <span class="ck">in</span> enumerate(cats.items()):
+        pts = [s <span class="ck">for</span> s <span class="ck">in</span> sensitivity <span class="ck">if</span> s[<span class="cs">"category"</span>] == key]
+        <span class="ck">if not</span> pts: <span class="ck">continue</span>
+        fig.add_trace(go.Bar(name=label, x=[s[<span class="cs">"variable"</span>] <span class="ck">for</span> s <span class="ck">in</span> pts],
+                             y=[s[<span class="cs">"cost"</span>] <span class="ck">for</span> s <span class="ck">in</span> pts], marker_color=p[i % <span class="cn">5</span>]))
+    fig.update_layout(title=<span class="cs">"Cost Sensitivity Analysis"</span>, barmode=<span class="cs">"group"</span>,
+                      yaxis_tickprefix=<span class="cs">"$"</span>, yaxis_tickformat=<span class="cs">",.0f"</span>,
+                      paper_bgcolor=<span class="cs">"rgba(0,0,0,0)"</span>, plot_bgcolor=<span class="cs">"rgba(0,0,0,0)"</span>,
+                      height=<span class="cn">380</span>, legend=dict(orientation=<span class="cs">"h"</span>, y=-<span class="cn">0.22</span>))
+    <span class="ck">return</span> fig
+
+<span class="ck">def</span> <span class="cf">chart_pie</span>(bd, p):
+    fig = go.Figure(go.Pie(
+        labels=[<span class="cs">"Labor"</span>,<span class="cs">"Infrastructure"</span>,<span class="cs">"Risk Buffer"</span>,<span class="cs">"Overhead"</span>],
+        values=[bd.get(<span class="cs">"labor"</span>,<span class="cn">0</span>), bd.get(<span class="cs">"infrastructure"</span>,<span class="cn">0</span>),
+                bd.get(<span class="cs">"risk_buffer"</span>,<span class="cn">0</span>), bd.get(<span class="cs">"overhead"</span>,<span class="cn">0</span>)],
+        marker_colors=p[:<span class="cn">4</span>], hole=<span class="cn">0.42</span>, textinfo=<span class="cs">"label+percent"</span>))
+    total = bd.get(<span class="cs">"total"</span>, <span class="cn">0</span>)
+    fig.update_layout(title=<span class="cs">"Cost Breakdown by Category"</span>, height=<span class="cn">360</span>,
+                      annotations=[dict(text=<span class="cs">f"${total:,.0f}"</span>, x=<span class="cn">0.5</span>, y=<span class="cn">0.5</span>,
+                                        font_size=<span class="cn">14</span>, showarrow=<span class="cn">False</span>)],
+                      paper_bgcolor=<span class="cs">"rgba(0,0,0,0)"</span>)
+    <span class="ck">return</span> fig
+
+<span class="ck">def</span> <span class="cf">chart_feature_importance</span>(fi, p):
+    items  = sorted(fi.items(), key=<span class="ck">lambda</span> x: x[<span class="cn">1</span>])
+    labels = [k.replace(<span class="cs">"_"</span>,<span class="cs">" "</span>).title() <span class="ck">for</span> k,_ <span class="ck">in</span> items]
+    values = [v <span class="ck">for</span> _,v <span class="ck">in</span> items]
+    fig = go.Figure(go.Bar(x=values, y=labels, orientation=<span class="cs">"h"</span>,
+                           marker_color=p[:<span class="cn">4</span>], text=[<span class="cs">f"{v:.3f}"</span> <span class="ck">for</span> v <span class="ck">in</span> values],
+                           textposition=<span class="cs">"outside"</span>))
+    fig.update_layout(title=<span class="cs">"RandomForest Feature Importance"</span>, height=<span class="cn">300</span>,
+                      paper_bgcolor=<span class="cs">"rgba(0,0,0,0)"</span>, plot_bgcolor=<span class="cs">"rgba(0,0,0,0)"</span>)
+    <span class="ck">return</span> fig
+
+<span class="ck">def</span> <span class="cf">chart_confidence</span>(br, p):
+    cost = br.get(<span class="cs">"estimated_cost"</span>, <span class="cn">0</span>)
+    ci_l = br.get(<span class="cs">"confidence_low"</span>, <span class="cn">0</span>)
+    ci_h = br.get(<span class="cs">"confidence_high"</span>, cost * <span class="cn">2</span>)
+    std  = max(br.get(<span class="cs">"std_dev"</span>, <span class="cn">1</span>), <span class="cn">1</span>)
+    xs   = np.linspace(max(<span class="cn">0</span>, ci_l * <span class="cn">0.8</span>), ci_h * <span class="cn">1.2</span>, <span class="cn">200</span>)
+    ys   = np.exp(-<span class="cn">0.5</span> * ((xs - cost) / std)**<span class="cn">2</span>)
+    fig  = go.Figure()
+    fig.add_trace(go.Scatter(x=xs, y=ys, fill=<span class="cs">"tozeroy"</span>,
+                             fillcolor=p[<span class="cn">0</span>]+<span class="cs">"30"</span>, line=dict(color=p[<span class="cn">0</span>], width=<span class="cn">2</span>)))
+    fig.add_vline(x=cost, line=dict(color=p[<span class="cn">1</span>], width=<span class="cn">2.5</span>),
+                  annotation_text=<span class="cs">f"${cost:,.0f}"</span>, annotation_position=<span class="cs">"top right"</span>)
+    <span class="ck">for</span> vx, lbl <span class="ck">in</span> [(ci_l, <span class="cs">f"CI Low"</span>), (ci_h, <span class="cs">f"CI High"</span>)]:
+        fig.add_vline(x=vx, line=dict(color=p[<span class="cn">2</span>], dash=<span class="cs">"dash"</span>), annotation_text=lbl)
+    fig.update_layout(title=<span class="cs">"Budget Prediction — 95% CI"</span>, height=<span class="cn">340</span>,
+                      xaxis_tickprefix=<span class="cs">"$"</span>, xaxis_tickformat=<span class="cs">",.0f"</span>,
+                      paper_bgcolor=<span class="cs">"rgba(0,0,0,0)"</span>, plot_bgcolor=<span class="cs">"rgba(0,0,0,0)"</span>)
+    <span class="ck">return</span> fig
+
+<span class="ck">def</span> <span class="cf">chart_donut</span>(ks, urgency, p):
+    dist = ks.get(<span class="cs">"urgency_distribution"</span>, {})
+    fig  = go.Figure(go.Pie(
+        labels=[k.upper() <span class="ck">for</span> k <span class="ck">in</span> dist], values=list(dist.values()),
+        marker_colors=p, hole=<span class="cn">0.58</span>, textinfo=<span class="cs">"label+value"</span>))
+    fig.update_layout(title=<span class="cs">"Knowledge Base — Urgency Distribution"</span>, height=<span class="cn">320</span>,
+                      annotations=[dict(text=urgency.upper(), x=<span class="cn">0.5</span>, y=<span class="cn">0.5</span>,
+                                        font_size=<span class="cn">13</span>, showarrow=<span class="cn">False</span>)],
+                      paper_bgcolor=<span class="cs">"rgba(0,0,0,0)"</span>)
+    <span class="ck">return</span> fig
+
+<span class="ck">def</span> <span class="cf">chart_scatter</span>(p):
+    df = pd.read_csv(os.path.join(os.path.dirname(__file__), <span class="cs">"data"</span>, <span class="cs">"project_cost_data.csv"</span>))
+    df[<span class="cs">"risk_label"</span>] = df[<span class="cs">"risk_level"</span>].map({<span class="cn">1</span>:<span class="cs">"Low"</span>,<span class="cn">2</span>:<span class="cs">"Medium"</span>,<span class="cn">3</span>:<span class="cs">"High"</span>})
+    fig = go.Figure()
+    <span class="ck">for</span> i, (rl, grp) <span class="ck">in</span> enumerate(df.groupby(<span class="cs">"risk_label"</span>)):
+        fig.add_trace(go.Scatter(
+            x=grp[<span class="cs">"team_size"</span>], y=grp[<span class="cs">"estimated_cost"</span>],
+            mode=<span class="cs">"markers+text"</span>, name=<span class="cs">f"Risk: {rl}"</span>,
+            text=grp[<span class="cs">"region"</span>], textposition=<span class="cs">"top center"</span>,
+            marker=dict(size=grp[<span class="cs">"duration_weeks"</span>]*<span class="cn">2.5</span>, color=p[i%<span class="cn">5</span>], opacity=<span class="cn">0.8</span>)))
+    fig.update_layout(title=<span class="cs">"Cost vs Team Size (bubble=duration)"</span>, height=<span class="cn">360</span>,
+                      yaxis_tickprefix=<span class="cs">"$"</span>, yaxis_tickformat=<span class="cs">",.0f"</span>,
+                      paper_bgcolor=<span class="cs">"rgba(0,0,0,0)"</span>, plot_bgcolor=<span class="cs">"rgba(0,0,0,0)"</span>)
+    <span class="ck">return</span> fig
+
+
+<span class="ck">def</span> <span class="cf">render_chart</span>(name, rj, theme):
+    p = PALETTES.get(theme, list(PALETTES.values())[<span class="cn">0</span>])
+    <span class="ck">if not</span> rj <span class="ck">or</span> rj == <span class="cs">"{}"</span>:
+        fig = go.Figure()
+        fig.add_annotation(text=<span class="cs">"Click Analyze to generate charts"</span>,
+                           xref=<span class="cs">"paper"</span>,yref=<span class="cs">"paper"</span>,x=<span class="cn">0.5</span>,y=<span class="cn">0.5</span>,
+                           showarrow=<span class="cn">False</span>,font=dict(size=<span class="cn">14</span>,color=<span class="cs">"#888"</span>))
+        fig.update_layout(paper_bgcolor=<span class="cs">"rgba(0,0,0,0)"</span>,height=<span class="cn">350</span>)
+        <span class="ck">return</span> fig
+    r = json.loads(rj)
+    bd = r.get(<span class="cs">"cost_breakdown"</span>,{}); sen = r.get(<span class="cs">"sensitivity"</span>,[])
+    fi = r.get(<span class="cs">"feature_importances"</span>,{}); br = r.get(<span class="cs">"budget_result"</span>,{})
+    ks = r.get(<span class="cs">"kb_stats"</span>,{}); urg = r.get(<span class="cs">"kb_result"</span>,{}).get(<span class="cs">"urgency_level"</span>,<span class="cs">"medium"</span>)
+    <span class="ck">if</span> <span class="cs">"Sensitivity"</span> <span class="ck">in</span> name:   <span class="ck">return</span> chart_sensitivity(sen, p)
+    <span class="ck">if</span> <span class="cs">"Pie"</span>         <span class="ck">in</span> name:   <span class="ck">return</span> chart_pie(bd, p)
+    <span class="ck">if</span> <span class="cs">"Feature"</span>     <span class="ck">in</span> name:   <span class="ck">return</span> chart_feature_importance(fi, p)
+    <span class="ck">if</span> <span class="cs">"Confidence"</span>  <span class="ck">in</span> name:   <span class="ck">return</span> chart_confidence(br, p)
+    <span class="ck">if</span> <span class="cs">"Donut"</span>       <span class="ck">in</span> name:   <span class="ck">return</span> chart_donut(ks, urg, p)
+    <span class="ck">if</span> <span class="cs">"Scatter"</span>     <span class="ck">in</span> name:   <span class="ck">return</span> chart_scatter(p)
+    <span class="ck">return</span> go.Figure()
+
+
+<span class="ck">def</span> <span class="cf">analyze_all</span>(bname, email, ts, dur, risk, region, issue, flan, chart, theme):
+    <span class="ck">if not</span> bname.strip() <span class="ck">or not</span> issue.strip():
+        msg = <span class="cs">"⚠️ Please fill Business Name and Issue Description."</span>
+        <span class="ck">return</span> msg, <span class="cs">"N/A"</span>, <span class="cs">""</span>, go.Figure(), <span class="cs">"{}"</span>, <span class="cs">"_No queries_"</span>, <span class="cs">"—"</span>
+
+    r  = run_analysis(bname, email, <span class="cn">int</span>(ts), <span class="cn">int</span>(dur), risk, region, issue, flan)
+    br = r[<span class="cs">"budget_result"</span>]
+    ml = (
+        <span class="cs">f"${br['estimated_cost']:,.2f} USD\n\n"</span>
+        <span class="cs">f"95% CI: ${br['confidence_low']:,.0f} – ${br['confidence_high']:,.0f}\n"</span>
+        <span class="cs">f"R²: {br['model_accuracy']:.1f}%   |   Std: ${br['std_dev']:,.0f}"</span>
+    )
+    session_history.append({
+        <span class="cs">"Business"</span>: bname, <span class="cs">"Dept"</span>: r[<span class="cs">"kb_result"</span>][<span class="cs">"department"</span>],
+        <span class="cs">"Urgency"</span>: r[<span class="cs">"kb_result"</span>][<span class="cs">"urgency_level"</span>].upper(),
+        <span class="cs">"Budget"</span>: <span class="cs">f"${br['estimated_cost']:,.0f}"</span>,
+        <span class="cs">"Conf"</span>: <span class="cs">f"{r['kb_result']['confidence_score']*100:.1f}%"</span>,
+    })
+    rj  = json.dumps(r, default=<span class="cn">str</span>)
+    fig = render_chart(chart, rj, theme)
+    hist_md = pd.DataFrame(session_history).to_markdown(index=<span class="cn">False</span>)
+    <span class="ck">return</span> r[<span class="cs">"executive_brief"</span>], ml, r[<span class="cs">"api_log"</span>], fig, rj, hist_md, r[<span class="cs">"flan_status"</span>]
+
+
+<span class="ck">def</span> <span class="cf">build_app</span>():
+    <span class="ck">with</span> gr.Blocks(
+        theme=gr.themes.Default(
+            primary_hue=gr.themes.colors.orange,
+            secondary_hue=gr.themes.colors.blue),
+        title=<span class="cs">"Enterprise AI Agent"</span>,
+    ) <span class="ck">as</span> demo:
+
+        state = gr.State(<span class="cs">"{}"</span>)
+
+        gr.HTML(<span class="cs">"""&lt;h2 style="margin:0 0 4px"&gt;🏢 Digital Business Operations Management&lt;/h2&gt;
+                &lt;p style="color:#666;margin:0"&gt;Gradio Frontend → FastAPI Backend |
+                MIT Professional Education × Quanskill&lt;/p&gt;"""</span>)
+
+        <span class="ck">with</span> gr.Row():
+            theme_dd = gr.Dropdown(choices=list(PALETTES.keys()),
+                                   value=<span class="cs">"🟠 Fintech Orange"</span>, label=<span class="cs">"🎨 Color Theme"</span>)
+
+        gr.Markdown(<span class="cs">"---"</span>)
+
+        <span class="ck">with</span> gr.Row(equal_height=<span class="cn">False</span>):
+            <span class="ck">with</span> gr.Column(scale=<span class="cn">1</span>):
+                bname  = gr.Textbox(label=<span class="cs">"Business Name"</span>,    value=<span class="cs">"VinFintech Corp"</span>)
+                email  = gr.Textbox(label=<span class="cs">"Administrator Email"</span>, value=<span class="cs">"admin@vinfintech.vn"</span>)
+                <span class="ck">with</span> gr.Row():
+                    ts  = gr.Number(label=<span class="cs">"Project Team Size"</span>, value=<span class="cn">12</span>, minimum=<span class="cn">1</span>)
+                    dur = gr.Number(label=<span class="cs">"Duration (Weeks)"</span>,  value=<span class="cn">8</span>,  minimum=<span class="cn">1</span>)
+                risk   = gr.Dropdown([<span class="cs">"low"</span>,<span class="cs">"medium"</span>,<span class="cs">"high"</span>], value=<span class="cs">"medium"</span>, label=<span class="cs">"Risk"</span>)
+                region = gr.Dropdown([<span class="cs">"northeast"</span>,<span class="cs">"northwest"</span>,<span class="cs">"southeast"</span>,<span class="cs">"southwest"</span>],
+                                     value=<span class="cs">"southwest"</span>, label=<span class="cs">"Deployment Scope"</span>)
+                issue  = gr.Textbox(
+                    label=<span class="cs">"Issue Description"</span>, lines=<span class="cn">3</span>,
+                    value=<span class="cs">"delays in calculating employees end-of-year performance KPIs and bonuses"</span>)
+                flan   = gr.Checkbox(label=<span class="cs">"Activate FLAN-T5 (LLM English tone fine-tuning)"</span>)
+                flan_status = gr.Textbox(label=<span class="cs">"FLAN-T5 Status"</span>, interactive=<span class="cn">False</span>, lines=<span class="cn">1</span>)
+                btn    = gr.Button(<span class="cs">"🚀 Analyze"</span>, variant=<span class="cs">"primary"</span>, size=<span class="cs">"lg"</span>)
+
+            <span class="ck">with</span> gr.Column(scale=<span class="cn">1</span>):
+                gr.HTML(<span class="cs">"&lt;b&gt;📊 Experimental Results from the Expert System&lt;/b&gt;"</span>)
+                <span class="ck">with</span> gr.Row():
+                    <span class="ck">with</span> gr.Column(scale=<span class="cn">3</span>):
+                        brief_out = gr.Textbox(label=<span class="cs">"📄 Executive Platform Text"</span>,
+                                               lines=<span class="cn">16</span>, interactive=<span class="cn">False</span>)
+                    <span class="ck">with</span> gr.Column(scale=<span class="cn">2</span>):
+                        ml_out  = gr.Textbox(label=<span class="cs">"💵 ML Predictive Engine"</span>,
+                                             lines=<span class="cn">5</span>, interactive=<span class="cn">False</span>)
+                        log_out = gr.Textbox(label=<span class="cs">"ℹ️ Information & API Logs"</span>,
+                                             lines=<span class="cn">8</span>, interactive=<span class="cn">False</span>)
+
+        gr.Markdown(<span class="cs">"---\n### 📈 Analytics & Visualization"</span>)
+        chart_dd  = gr.Dropdown(choices=CHART_LIST, value=CHART_LIST[<span class="cn">0</span>], label=<span class="cs">"Select Chart"</span>)
+        chart_out = gr.Plot(show_label=<span class="cn">False</span>)
+
+        gr.Markdown(<span class="cs">"---"</span>)
+        <span class="ck">with</span> gr.Accordion(<span class="cs">"🕒 Session Query History"</span>, open=<span class="cn">False</span>):
+            hist_md = gr.Markdown(<span class="cs">"_No queries yet._"</span>)
+
+        <span class="cm"># Events</span>
+        inputs = [bname, email, ts, dur, risk, region, issue, flan, chart_dd, theme_dd]
+        outputs = [brief_out, ml_out, log_out, chart_out, state, hist_md, flan_status]
+
+        btn.click(fn=analyze_all, inputs=inputs, outputs=outputs)
+        chart_dd.change(fn=render_chart, inputs=[chart_dd, state, theme_dd], outputs=[chart_out])
+        theme_dd.change(fn=render_chart, inputs=[chart_dd, state, theme_dd], outputs=[chart_out])
+
+    <span class="ck">return</span> demo
+
+
+<span class="ck">if</span> __name__ == <span class="cs">"__main__"</span>:
+    app = build_app()
+    app.launch(server_name=<span class="cs">"0.0.0.0"</span>, server_port=<span class="cn">7860</span>, share=<span class="cn">False</span>)
+    <span class="cm"># Mở: http://127.0.0.1:7860</span></code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ SECTION 8 — LAB A ════════════════════ -->
+<section class="section" id="s8">
+  <div class="section-header">
+    <div class="section-num">08</div>
+    <div>
+      <div class="section-title">Lab A — Credit Risk ML (Slide 11)</div>
+      <div class="section-sub">Kịch bản thực hành chính · RandomForest · DBS ALAN pattern</div>
+    </div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-icon">🎯</div>
+    <div><strong>Mục tiêu Lab A:</strong> Giải câu hỏi từ Slide 11: <em>"Which single variable causes the largest cost increase — BMI or Smoker?"</em> → Trong bối cảnh fintech: <em>"team_size hay risk_level — cái nào tác động lớn hơn lên deployment cost?"</em></div>
+  </div>
+
+  <div class="exercise">
+    <h4>🧪 Bài tập thực hành Lab A — Chạy từng bước trong VS Code</h4>
+    <ul>
+      <li><strong>Bước 1:</strong> Mở terminal trong VS Code (<span style="font-family:monospace;color:#FFD700">Ctrl+`</span>), chắc chắn <span style="font-family:monospace;color:#A8D8A8">(.venv)</span> đang active</li>
+      <li><strong>Bước 2:</strong> Chạy: <span style="font-family:monospace;color:#FFD700">python core/predictor.py</span></li>
+      <li><strong>Bước 3:</strong> Quan sát feature_importances — cái nào cao nhất?</li>
+      <li><strong>Bước 4:</strong> Thử nghiệm sensitivity: tăng team +8 vs chuyển risk sang "high" → cái nào tăng cost nhiều hơn?</li>
+      <li><strong>Bước 5:</strong> Mở <span style="font-family:monospace;color:#FFD700">http://127.0.0.1:7860</span>, nhập issue, chọn chart "Sensitivity" để visualize</li>
+    </ul>
+    <div class="question">💬 Thảo luận: Trong thực tế ngân hàng, DBS ALAN dùng feature importance để giải thích quyết định tín dụng cho khách hàng và kiểm toán viên (Model Explainability — Basel IV requirement). Làm thế nào để kết nối feature importance với nguyên tắc GDPR "right to explanation"?</div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-icon" style="background:#FFF7ED">▶️</div>
+      <div><div class="phase-title">Chạy toàn bộ hệ thống (3 terminal tabs)</div></div>
+      <span class="phase-badge badge-run">Run</span>
+    </div>
+    <div class="phase-body">
+      <div class="code-wrap">
+        <div class="code-header">
+          <span class="code-lang">bash — Terminal Tab 1: FastAPI backend</span>
+        </div>
+        <pre><code>source .venv/bin/activate
+python app_api.py
+<span class="cm"># → Running at http://127.0.0.1:8000</span>
+<span class="cm"># → Swagger UI: http://127.0.0.1:8000/docs</span></code></pre>
+      </div>
+      <div class="code-wrap">
+        <div class="code-header">
+          <span class="code-lang">bash — Terminal Tab 2: Gradio frontend</span>
+        </div>
+        <pre><code>source .venv/bin/activate
+python app_frontend.py
+<span class="cm"># → Running at http://127.0.0.1:7860</span></code></pre>
+      </div>
+      <div class="code-wrap">
+        <div class="code-header">
+          <span class="code-lang">bash — Terminal Tab 3: Test API trực tiếp</span>
+        </div>
+        <pre><code><span class="cm"># Test bằng curl</span>
+curl -X POST http://127.0.0.1:8000/api/v1/analyze \
+  -H "Content-Type: application/json" \
+  -d '{
+    "business_name": "VinFintech Corp",
+    "admin_email": "admin@test.com",
+    "team_size": 12,
+    "duration_weeks": 8,
+    "risk_level": "high",
+    "region": "southwest",
+    "issue_description": "unauthorized financial variance detected in quarterly general ledger",
+    "use_llm": false
+  }' | python -m json.tool | head -30</code></pre>
+      </div>
+
+      <div class="output-preview">
+{
+  "executive_brief": "=== EXECUTIVE OPERATIONAL ANALYSIS REPORT ===\nBusiness: VinFintech Corp\n...",
+  "flan_status": "FLAN-T5 not activated — using deterministic report",
+  "kb_result": {
+    "department": "Finance Advisor",
+    "urgency_level": "high",
+    "confidence_score": 1.0
+  },
+  "budget_result": {
+    "estimated_cost": 53780.5,
+    "model_accuracy": 97.4,
+    "confidence_low": 12440.0,
+    "confidence_high": 95121.0
+  }
+}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ SECTION 9 — LAB B ════════════════════ -->
+<section class="section" id="s9">
+  <div class="section-header">
+    <div class="section-num">09</div>
+    <div>
+      <div class="section-title">Lab B — AI Agent + Prompt Engineering (Slide 12)</div>
+      <div class="section-sub">3 bước thực hành · bunq Finn pattern · Role Prompting</div>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <h4>🧪 Lab B — Prompt Engineering Exercise (Slides 7 & 12)</h4>
+    <p style="margin-bottom:10px">Tạo file <span style="font-family:monospace;color:#FFD700">lab_b_prompt_experiment.py</span> và chạy 3 bước:</p>
+    <ul>
+      <li><strong>Step 1 — Zero-Shot:</strong> Không có context, hỏi thẳng LLM</li>
+      <li><strong>Step 2 — Role + Constrained Rewrite:</strong> Đóng vai compliance officer, format rõ ràng</li>
+      <li><strong>Step 3 — So sánh:</strong> Tại sao Step 2 output tốt hơn cho khách hàng ngân hàng?</li>
+    </ul>
+    <div class="question">💬 Kết nối lý thuyết: bunq Finn dùng exactly Step 2 approach — GenAI đóng vai AI financial advisor để rewrite raw ML fraud alert thành narrative thân thiện với user. Đây là "LLM Explainer layer" trong pipeline (Slide 9, 12, 13).</div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-icon" style="background:#ECFDF5">🧪</div>
+      <div><div class="phase-title">lab_b_prompt_experiment.py</div></div>
+      <span class="phase-badge badge-code">Code</span>
+    </div>
+    <div class="phase-body">
+      <div class="code-wrap">
+        <div class="code-header">
+          <span class="code-lang">python</span>
+          <span class="code-file">lab_b_prompt_experiment.py — chạy: python lab_b_prompt_experiment.py</span>
+        </div>
+        <pre><code><span class="ck">"""
+Lab B — Prompt Engineering Experiment (Slide 12)
+Minh họa 3 kỹ thuật từ Slide 7:
+  Step 1: Zero-Shot
+  Step 2: Role Prompting + Constrained Rewrite
+  Step 3: So sánh output
+Dùng app_backend để lấy structured data thật, sau đó test prompts.
+"""</span>
+
+<span class="ck">from</span> app_backend <span class="ck">import</span> run_analysis
+
+<span class="cm"># ── Lấy kết quả thật từ AI Agent pipeline ─────────────</span>
+result = run_analysis(
+    business_name=<span class="cs">"VinFintech Corp"</span>,
+    admin_email=<span class="cs">"demo@lab.vn"</span>,
+    team_size=<span class="cn">12</span>, duration_weeks=<span class="cn">8</span>,
+    risk_level=<span class="cs">"medium"</span>, region=<span class="cs">"southwest"</span>,
+    issue_description=<span class="cs">"delays in calculating employees end-of-year performance KPIs and bonuses"</span>,
+    use_llm=<span class="cn">False</span>,
+)
+
+kb  = result[<span class="cs">"kb_result"</span>]
+br  = result[<span class="cs">"budget_result"</span>]
+raw_data = <span class="cs">f"""
+Department: {kb['department']}
+Urgency: {kb['urgency_level']}
+Issue: delays in calculating KPIs and bonuses
+Solution: {kb['solution']}
+Action: {kb['recommended_action']}
+Budget: ${br['estimated_cost']:,.0f} USD
+Confidence: {kb['confidence_score']*100:.0f}%
+"""</span>
+
+print(<span class="cs">"="*60</span>)
+print(<span class="cs">"📊 RAW DATA FROM AI AGENT PIPELINE:"</span>)
+print(<span class="cs">"="*60</span>)
+print(raw_data)
+
+<span class="cm"># ── STEP 1: Zero-Shot Prompt ──────────────────────────</span>
+print(<span class="cs">"\n"</span> + <span class="cs">"="*60</span>)
+print(<span class="cs">"STEP 1 — ZERO-SHOT PROMPT (Slide 7)"</span>)
+print(<span class="cs">"="*60</span>)
+step1_prompt = <span class="cs">f"Summarize this operational data: {raw_data}"</span>
+print(<span class="cs">f"PROMPT:\n{step1_prompt}"</span>)
+print(<span class="cs">"\n→ Expected: Generic, technical, no clear action for customer"</span>)
+print(<span class="cs">"→ This is what a basic chatbot would produce"</span>)
+
+<span class="cm"># ── STEP 2: Role + Constrained Rewrite Prompt ─────────</span>
+print(<span class="cs">"\n"</span> + <span class="cs">"="*60</span>)
+print(<span class="cs">"STEP 2 — ROLE PROMPTING + CONSTRAINED REWRITE (Slide 7)"</span>)
+print(<span class="cs">"="*60</span>)
+step2_prompt = <span class="cs">f"""You are a senior compliance officer at a global bank.
+Your job is to translate operational system alerts into clear,
+customer-friendly communications.
+
+Rules:
+- No technical jargon
+- Maximum 3 sentences
+- Include ONE specific next action
+- Tone: professional but empathetic
+- End with: "Contact support@bank.com if you have questions."
+
+Operational Alert:
+{raw_data}
+
+Write the customer advisory:"""</span>
+
+print(<span class="cs">f"PROMPT:\n{step2_prompt}"</span>)
+print(<span class="cs">"\n→ This is the bunq Finn pattern (Slide 9):"</span>)
+print(<span class="cs">"→ GenAI rewriting raw ML output into human-friendly narrative"</span>)
+
+<span class="cm"># ── STEP 3: Structured Output Prompt ──────────────────</span>
+print(<span class="cs">"\n"</span> + <span class="cs">"="*60</span>)
+print(<span class="cs">"STEP 3 — STRUCTURED OUTPUT PROMPT (Slide 7)"</span>)
+print(<span class="cs">"="*60</span>)
+step3_prompt = <span class="cs">f"""Analyze this operational alert and respond ONLY in JSON format.
+No preamble. No explanation outside the JSON.
+
+Alert data: {raw_data}
+
+Required JSON structure:
+{{
+  "risk_score": "LOW|MEDIUM|HIGH",
+  "rationale": "one sentence explanation",
+  "recommended_action": "specific next step",
+  "estimated_resolution_days": integer,
+  "escalation_required": boolean
+}}"""</span>
+
+print(<span class="cs">f"PROMPT:\n{step3_prompt}"</span>)
+print(<span class="cs">"\n→ This enables feeding AI output back into systems/APIs"</span>)
+print(<span class="cs">"→ DBS ADA uses this pattern for data pipeline automation"</span>)
+
+print(<span class="cs">"\n"</span> + <span class="cs">"="*60</span>)
+print(<span class="cs">"DISCUSSION QUESTIONS:"</span>)
+print(<span class="cs">"="*60</span>)
+print(<span class="cs">"1. Tại sao Step 2 output tốt hơn Step 1 cho khách hàng retail?"</span>)
+print(<span class="cs">"2. Step 3 có thể tự động feed vào workflow engine không?"</span>)
+print(<span class="cs">"3. Rủi ro gì khi dùng GenAI rewrite trong regulated finance?"</span>)
+print(<span class="cs">"   (Hint: GDPR Article 22 — right to explanation)"</span>)</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════ SECTION 10 — EXTENSION ════════════════════ -->
+<section class="section" id="s10">
+  <div class="section-header">
+    <div class="section-num">10</div>
+    <div>
+      <div class="section-title">Mở rộng & Module 8 Capstone (Slide 15–16)</div>
+      <div class="section-sub">Sau lab · Tự học · Roadmap thực tế</div>
+    </div>
+  </div>
+
+  <div class="callout theory">
+    <div class="callout-icon">🚀</div>
+    <div><strong>Slide 15 — Key Takeaway #5:</strong> "The Pattern Transfers Across Domains — Healthcare → Finance → HR → Legal: the same Agentic AI architecture scales to any knowledge-intensive industry."</div>
+  </div>
+
+  <table>
+    <tr>
+      <th>Upgrade</th>
+      <th>Thư viện</th>
+      <th>Mục đích</th>
+      <th>Kết nối slide</th>
+    </tr>
+    <tr>
+      <td>FAISS thay TF-IDF</td>
+      <td><code>faiss-cpu</code> + <code>sentence-transformers</code></td>
+      <td>Semantic search chính xác hơn (cosine trên dense vectors)</td>
+      <td>Slide 5, 12</td>
+    </tr>
+    <tr>
+      <td>LangChain Agent</td>
+      <td><code>langchain</code></td>
+      <td>Orchestrate multi-step reasoning chain</td>
+      <td>Slide 16</td>
+    </tr>
+    <tr>
+      <td>Real credit dataset</td>
+      <td>Kaggle: Give Me Some Credit</td>
+      <td>Train trên 150K records thay 10 rows CSV</td>
+      <td>Slide 11</td>
+    </tr>
+    <tr>
+      <td>SHAP explanations</td>
+      <td><code>shap</code></td>
+      <td>Explain từng prediction → Basel IV compliance</td>
+      <td>Slide 14</td>
+    </tr>
+    <tr>
+      <td>PostgreSQL memory</td>
+      <td><code>asyncpg</code></td>
+      <td>Thay JSON file → production-grade memory</td>
+      <td>Slide 13</td>
+    </tr>
+    <tr>
+      <td>OpenAI GPT-4o</td>
+      <td><code>openai</code></td>
+      <td>Thay FLAN-T5 → mạnh hơn nhiều, cần API key</td>
+      <td>Slide 6, 7</td>
+    </tr>
+  </table>
+
+  <div class="phase">
+    <div class="phase-header">
+      <div class="phase-icon" style="background:#F5F3FF">📋</div>
+      <div><div class="phase-title">Checklist hoàn thành Lab</div></div>
+      <span class="phase-badge badge-run">Verify</span>
+    </div>
+    <div class="phase-body">
+      <ul class="checklist">
+        <li><div class="chk"></div><span><strong>Phase 0:</strong> Virtual env active, tất cả packages cài thành công</span></li>
+        <li><div class="chk"></div><span><strong>Phase 1:</strong> Cấu trúc thư mục đầy đủ, 2 CSV files tồn tại</span></li>
+        <li><div class="chk"></div><span><strong>Phase 2:</strong> <code>python core/database.py</code> → HR Bot, confidence >90%</span></li>
+        <li><div class="chk"></div><span><strong>Phase 3:</strong> <code>python core/predictor.py</code> → Budget + sensitivity analysis</span></li>
+        <li><div class="chk"></div><span><strong>Phase 5:</strong> FastAPI chạy, <code>http://127.0.0.1:8000/docs</code> mở được</span></li>
+        <li><div class="chk"></div><span><strong>Phase 6:</strong> Gradio UI chạy tại port 7860, Analyze button hoạt động</span></li>
+        <li><div class="chk"></div><span><strong>Lab A:</strong> Đã chạy sensitivity analysis, trả lời được câu hỏi team vs risk</span></li>
+        <li><div class="chk"></div><span><strong>Lab B:</strong> Đã so sánh 3 prompt styles, thảo luận được tradeoffs</span></li>
+        <li><div class="chk"></div><span><strong>Charts:</strong> Cả 6 biểu đồ render đúng sau khi Analyze</span></li>
+        <li><div class="chk"></div><span><strong>Capstone:</strong> Đề xuất được 1 use case áp dụng pipeline này cho tổ chức của mình</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+</main>
+</div>
+
+</body>
+</html>

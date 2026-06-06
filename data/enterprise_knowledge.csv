@@ -1,0 +1,5 @@
+issue_pattern,solution,department,urgency_level,recommended_action
+unauthorized financial variance detected in quarterly general ledger,Deploy Automated Reconciliation Agents to audit ledger transactions in real-time,Finance Advisor,high,Initiate immediate operational deep-dive audit and lock matching batch records
+latency spike and data desynchronization on core cloud ERP platform,Upgrade API gateway bandwidth allocation and establish Redis distributed caching layer,IT Copilot,high,Schedule immediate out-of-hours infrastructure maintenance and cluster scaling
+delays in calculating employees end-of-year performance KPIs and bonuses,Implement automated pipeline processing to stream real-time operational data into ERP,HR Bot,medium,Configure automated approvals workflows via central enterprise resource system
+acute shortage of senior automated QA software engineers for deployment,Outsource mid-term software engineering tasks or invoke internal cross-skilling program,Product Management,medium,Open vendor bidding for certified engineering subcontractors to meet project milestones

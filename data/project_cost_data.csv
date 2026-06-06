@@ -1,0 +1,11 @@
+team_size,duration_weeks,risk_level,region,estimated_cost
+5,4,1,northwest,12500
+12,8,3,southeast,45800
+8,6,2,northeast,23000
+20,12,3,southwest,89000
+4,2,1,southeast,8500
+10,10,2,northeast,29500
+15,14,3,southwest,71000
+7,5,2,northwest,18900
+25,16,3,northeast,112000
+3,2,1,southwest,6200

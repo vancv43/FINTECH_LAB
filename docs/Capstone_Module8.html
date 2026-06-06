@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 8 Capstone — FinSight AI Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=DM+Sans:wght@300;400;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:   #0A1628; --blue:   #1565C0; --cyan:  #00B4D8;
+  --gold:   #F59E0B; --green:  #10B981; --red:   #EF4444;
+  --purple: #8B5CF6; --gray:   #64748B; --light: #F0F4FF;
+  --border: #E2E8F0; --code-bg:#0D1B2A;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:#F8FAFF;color:var(--navy);line-height:1.65}
+
+/* ── HERO ── */
+.hero{background:var(--navy);padding:52px 0 0;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-60px;right:-80px;width:500px;height:500px;
+  background:radial-gradient(circle,rgba(0,180,216,.18) 0%,transparent 70%)}
+.hero::after{content:'';position:absolute;bottom:-40px;left:-60px;width:300px;height:300px;
+  background:radial-gradient(circle,rgba(139,92,246,.12) 0%,transparent 70%)}
+.hero-inner{max-width:1100px;margin:0 auto;padding:0 40px;position:relative}
+.capstone-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(245,158,11,.15);
+  border:1px solid rgba(245,158,11,.4);border-radius:20px;padding:5px 18px;
+  color:var(--gold);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:20px}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,4.5vw,3.4rem);
+  color:#fff;line-height:1.1;margin-bottom:14px}
+.hero h1 span{color:var(--cyan)}
+.hero h1 em{color:var(--gold);font-style:normal}
+.hero-sub{color:#A8C4E8;font-size:1rem;max-width:680px;margin-bottom:32px;line-height:1.7}
+.hero-meta{display:flex;flex-wrap:wrap;gap:28px;border-top:1px solid rgba(255,255,255,.08);padding:18px 0}
+.meta-item .lbl{display:block;color:#64748B;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.meta-item .val{display:block;color:#fff;font-size:14px;font-weight:700;margin-top:2px}
+.hero-bar{height:4px;background:rgba(255,255,255,.06)}
+.hero-bar div{height:4px;background:linear-gradient(90deg,var(--gold),var(--cyan),var(--purple))}
+
+/* ── LAYOUT ── */
+.layout{display:flex;max-width:1100px;margin:0 auto;padding:44px 40px;gap:44px}
+.sidebar{width:230px;flex-shrink:0;position:sticky;top:24px;height:fit-content}
+.toc-lbl{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--gray);text-transform:uppercase;margin-bottom:12px}
+.toc-list{list-style:none}
+.toc-list li{margin-bottom:2px}
+.toc-list a{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--gray);
+  text-decoration:none;padding:5px 8px;border-radius:6px;transition:all .15s}
+.toc-list a:hover{background:var(--light);color:var(--blue)}
+.toc-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.main{flex:1;min-width:0}
+
+/* ── SECTION ── */
+.section{margin-bottom:60px}
+.section-hd{display:flex;align-items:center;gap:14px;margin-bottom:28px;
+  padding-bottom:16px;border-bottom:2px solid var(--border)}
+.section-num{width:38px;height:38px;background:var(--navy);color:var(--cyan);
+  font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;
+  display:flex;align-items:center;justify-content:center;border-radius:9px;flex-shrink:0}
+.section-title{font-size:1.25rem;font-weight:700;color:var(--navy)}
+.section-sub{font-size:12px;color:var(--gray);margin-top:2px}
+
+/* ── PHASE / CARD ── */
+.phase{background:#fff;border:1px solid var(--border);border-radius:12px;margin-bottom:20px;overflow:hidden}
+.phase-hd{padding:16px 22px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border)}
+.phase-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.phase-title{font-weight:700;font-size:.95rem;color:var(--navy)}
+.phase-sub{font-size:11px;color:var(--gray);margin-top:2px}
+.phase-badge{margin-left:auto;font-size:10px;font-weight:700;padding:3px 12px;border-radius:20px;letter-spacing:.5px;text-transform:uppercase}
+.b-cap{background:#FEF9EC;color:#B45309}
+.b-tech{background:#EEF2FF;color:var(--purple)}
+.b-design{background:#ECFDF5;color:var(--green)}
+.b-eval{background:#FFF1F2;color:var(--red)}
+.b-idea{background:rgba(0,180,216,.1);color:#0369A1}
+.phase-body{padding:22px}
+
+/* ── STEP LIST ── */
+.steps{list-style:none}
+.steps li{display:flex;gap:14px;padding:11px 0;border-bottom:1px dashed var(--border)}
+.steps li:last-child{border-bottom:none}
+.step-num{width:24px;height:24px;border-radius:50%;background:var(--light);color:var(--blue);
+  font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:2px}
+.step-content strong{display:block;font-size:13.5px;color:var(--navy);margin-bottom:3px}
+.step-content p{font-size:12.5px;color:var(--gray);line-height:1.55}
+.step-content code{font-family:'IBM Plex Mono',monospace;font-size:11px;background:var(--light);
+  color:var(--blue);padding:1px 6px;border-radius:4px;border:1px solid var(--border)}
+
+/* ── CALLOUT ── */
+.callout{border-radius:10px;padding:14px 18px;margin:16px 0;display:flex;gap:12px;
+  align-items:flex-start;font-size:13px;line-height:1.6}
+.ci{font-size:18px;flex-shrink:0;margin-top:1px}
+.callout.info{background:#EFF6FF;border-left:3px solid var(--blue)}
+.callout.warn{background:#FFFBEB;border-left:3px solid var(--gold)}
+.callout.tip{background:#ECFDF5;border-left:3px solid var(--green)}
+.callout.theory{background:#F5F3FF;border-left:3px solid var(--purple)}
+.callout.cap{background:#FEF9EC;border-left:3px solid var(--gold)}
+
+/* ── TABLE ── */
+table{width:100%;border-collapse:collapse;font-size:13px;margin:16px 0}
+th{background:var(--navy);color:#fff;padding:11px 16px;text-align:left;font-size:11px;letter-spacing:.5px}
+td{padding:10px 16px;border-bottom:1px solid var(--border);vertical-align:top}
+tr:nth-child(even) td{background:var(--light)}
+td code{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--blue);
+  background:rgba(21,101,192,.08);padding:1px 5px;border-radius:3px}
+
+/* ── PIPELINE ── */
+.pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;padding:20px 0;margin:16px 0}
+.pipe-box{background:#fff;border:1.5px solid var(--border);border-radius:10px;
+  padding:12px 16px;text-align:center;min-width:130px;flex-shrink:0}
+.pipe-box.active{border-color:var(--cyan);background:rgba(0,180,216,.07)}
+.pipe-box.new{border-color:var(--gold);background:rgba(245,158,11,.06)}
+.pipe-box .picon{font-size:22px;margin-bottom:5px;display:block}
+.pipe-box .plbl{font-size:11px;font-weight:700;color:var(--navy);line-height:1.3}
+.pipe-box .psub{font-size:10px;color:var(--gray);margin-top:2px;display:block}
+.pipe-box .ptag{font-size:9px;background:rgba(245,158,11,.15);color:#92400E;
+  border-radius:4px;padding:1px 5px;display:inline-block;margin-top:4px;font-weight:700}
+.pipe-arrow{color:var(--cyan);font-size:20px;padding:0 8px;flex-shrink:0;font-weight:700}
+
+/* ── MILESTONE TIMELINE ── */
+.timeline{position:relative;padding-left:28px}
+.timeline::before{content:'';position:absolute;left:7px;top:0;bottom:0;width:2px;background:var(--border)}
+.milestone{position:relative;margin-bottom:24px}
+.milestone::before{content:'';position:absolute;left:-24px;top:4px;width:16px;height:16px;
+  border-radius:50%;border:2px solid var(--border);background:#fff}
+.milestone.w1::before{border-color:var(--cyan);background:var(--cyan)}
+.milestone.w2::before{border-color:var(--purple);background:var(--purple)}
+.milestone.w3::before{border-color:var(--gold);background:var(--gold)}
+.milestone.w4::before{border-color:var(--green);background:var(--green)}
+.ms-week{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--gray);margin-bottom:4px}
+.ms-title{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:6px}
+.ms-items{font-size:12.5px;color:var(--gray);line-height:1.7}
+.ms-items li{margin-bottom:2px}
+
+/* ── UI WIREFRAME ── */
+.wireframe{background:#fff;border:2px solid var(--border);border-radius:14px;overflow:hidden;
+  margin:16px 0;box-shadow:0 4px 24px rgba(0,0,0,.06)}
+.wf-bar{background:var(--navy);padding:10px 16px;display:flex;align-items:center;gap:10px}
+.wf-dots{display:flex;gap:5px}
+.wf-dot{width:10px;height:10px;border-radius:50%}
+.wf-title{color:#fff;font-size:12px;font-weight:700;margin-left:8px;font-family:'IBM Plex Mono',monospace}
+.wf-url{color:#64748B;font-size:11px;font-family:'IBM Plex Mono',monospace;margin-left:auto}
+.wf-body{padding:0}
+/* App chrome */
+.app-header{background:linear-gradient(135deg,#0A1628 0%,#0D1F3C 100%);padding:20px 24px;
+  display:flex;align-items:center;gap:16px}
+.app-logo{font-size:22px}
+.app-name{color:#fff;font-size:18px;font-weight:700;font-family:'Playfair Display',serif}
+.app-name span{color:var(--cyan)}
+.app-ver{background:rgba(245,158,11,.2);color:var(--gold);font-size:10px;font-weight:700;
+  padding:2px 8px;border-radius:4px;letter-spacing:1px}
+.app-layout{display:grid;grid-template-columns:260px 1fr;min-height:420px}
+.app-sidebar{background:#F0F4FF;border-right:1px solid var(--border);padding:16px}
+.app-main{background:#F8FAFF;padding:16px;display:flex;flex-direction:column;gap:12px}
+/* Sidebar items */
+.sb-label{font-size:9px;font-weight:700;letter-spacing:2px;color:var(--gray);
+  text-transform:uppercase;margin-bottom:8px;margin-top:12px;display:block}
+.sb-item{display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:8px;
+  margin-bottom:4px;font-size:12px;font-weight:600;cursor:pointer}
+.sb-item.active{background:#fff;color:var(--blue);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.sb-item.inactive{color:var(--gray)}
+.sb-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+/* Main area */
+.wf-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.wf-kpi{background:#fff;border:1px solid var(--border);border-radius:8px;padding:10px 12px}
+.wf-kpi-lbl{font-size:9px;font-weight:700;letter-spacing:1px;color:var(--gray);text-transform:uppercase}
+.wf-kpi-val{font-size:16px;font-weight:700;color:var(--navy);font-family:'IBM Plex Mono',monospace;margin-top:3px}
+.wf-kpi-val.await{color:#CBD5E1;font-size:11px;font-family:'DM Sans',sans-serif}
+.wf-tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin:0 -0px}
+.wf-tab{padding:8px 14px;font-size:12px;font-weight:700;color:var(--gray);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px}
+.wf-tab.active{color:var(--blue);border-bottom-color:var(--blue)}
+.wf-content{background:#fff;border:1px solid var(--border);border-radius:8px;padding:14px;min-height:160px;margin-top:8px}
+.wf-chart-area{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.wf-chart{background:#fff;border:1px solid var(--border);border-radius:8px;padding:12px;min-height:100px;display:flex;align-items:center;justify-content:center}
+.wf-chart-ph{text-align:center;color:#CBD5E1;font-size:11px}
+.wf-chat{background:#fff;border:1px solid var(--border);border-radius:8px;padding:12px}
+.wf-chat-msg{background:var(--light);border-radius:8px;padding:8px 12px;font-size:11px;color:var(--navy);margin-bottom:6px}
+.wf-chat-reply{background:rgba(0,180,216,.08);border:1px solid rgba(0,180,216,.2);border-radius:8px;padding:8px 12px;font-size:11px;color:#0369A1}
+.wf-input-bar{display:flex;gap:6px;margin-top:8px}
+.wf-input{flex:1;background:var(--light);border:1px solid var(--border);border-radius:6px;
+  padding:7px 12px;font-size:11px;color:var(--gray)}
+.wf-send{background:var(--navy);color:#fff;border:none;border-radius:6px;padding:7px 12px;font-size:11px;font-weight:700}
+/* SHAP area */
+.shap-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.shap-label{font-size:11px;color:var(--navy);width:110px;flex-shrink:0}
+.shap-bar-wrap{flex:1;background:#F0F4FF;border-radius:4px;height:14px;overflow:hidden}
+.shap-bar{height:14px;border-radius:4px}
+.shap-val{font-size:10px;color:var(--gray);width:50px;text-align:right}
+
+/* ── RUBRIC ── */
+.rubric-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.rubric-card{background:#fff;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.rubric-head{padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
+.rubric-title{font-weight:700;font-size:13px}
+.rubric-pts{font-size:20px;font-weight:900;font-family:'IBM Plex Mono',monospace}
+.rubric-body{padding:12px 16px;font-size:12.5px;color:var(--gray);border-top:1px solid var(--border)}
+.rubric-body li{margin-bottom:5px;line-height:1.5}
+
+/* ── TECH STACK GRID ── */
+.tech-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}
+.tech-card{background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+.tech-card .tc-icon{font-size:20px;margin-bottom:6px}
+.tech-card .tc-name{font-size:13px;font-weight:700;color:var(--navy)}
+.tech-card .tc-pkg{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--blue);
+  background:var(--light);padding:1px 6px;border-radius:4px;display:inline-block;margin:3px 0}
+.tech-card .tc-desc{font-size:11.5px;color:var(--gray);margin-top:4px;line-height:1.5}
+.tech-card .tc-slide{font-size:10px;background:rgba(245,158,11,.12);color:#92400E;
+  padding:1px 7px;border-radius:4px;display:inline-block;margin-top:4px;font-weight:700}
+
+/* ── EXERCISE BOX ── */
+.exercise{background:linear-gradient(135deg,#0A1628 0%,#0D1F3C 100%);
+  border-radius:12px;padding:24px;color:#fff;margin:20px 0}
+.exercise h4{color:var(--gold);font-size:.95rem;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.exercise p,.exercise li{font-size:13px;color:#A8C4E8;line-height:1.65}
+.exercise ul{padding-left:18px;margin:8px 0}
+.exercise li{margin-bottom:6px}
+.exercise .q{background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);
+  border-radius:8px;padding:12px 16px;margin-top:14px;color:var(--gold);font-size:13px;font-weight:600}
+
+/* ── COMPARE ── */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.ccard{border-radius:10px;padding:16px}
+.ccard h5{font-size:13px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.ccard ul{list-style:none;font-size:12.5px}
+.ccard li{padding:4px 0;border-bottom:1px dashed rgba(0,0,0,.07)}
+.ccard li:last-child{border-bottom:none}
+.card-lab{background:#EFF6FF;border:1.5px solid #BFDBFE}.card-lab h5{color:var(--blue)}
+.card-cap{background:#FFFBEB;border:1.5px solid #FDE68A}.card-cap h5{color:#92400E}
+
+/* ── CHECKLIST ── */
+.checklist{list-style:none}
+.checklist li{display:flex;align-items:flex-start;gap:10px;padding:9px 0;
+  border-bottom:1px solid var(--border);font-size:13px}
+.checklist li:last-child{border-bottom:none}
+.chk{width:18px;height:18px;border:2px solid var(--border);border-radius:4px;flex-shrink:0;margin-top:2px}
+
+/* ── BADGES ── */
+.inline-badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;
+  border-radius:12px;letter-spacing:.5px}
+.ib-gold{background:rgba(245,158,11,.15);color:#92400E}
+.ib-blue{background:#EEF2FF;color:var(--blue)}
+.ib-green{background:#ECFDF5;color:#059669}
+.ib-red{background:#FEF2F2;color:var(--red)}
+.ib-purple{background:#F5F3FF;color:var(--purple)}
+
+@media(max-width:768px){
+  .sidebar{display:none}
+  .layout{padding:24px 16px}
+  .tech-grid,.rubric-grid,.compare{grid-template-columns:1fr}
+  .wf-kpi-row{grid-template-columns:1fr 1fr}
+  .app-layout{grid-template-columns:1fr}
+  .app-sidebar{display:none}
+  .wf-chart-area{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ HERO ══════════════ -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="capstone-tag">🎓 Module 8 · Capstone Project · Slide 15–16</div>
+    <h1>FinSight <span>AI Pro</span><br><em>Enterprise Financial Intelligence Platform</em></h1>
+    <p class="hero-sub">Đồ án cuối khoá — Nâng cấp Lab B pipeline lên hệ thống AI Agent production-grade với FAISS semantic search, SHAP explainability, LangChain multi-step reasoning và OpenAI GPT-4o integration. Triển khai đầy đủ UI, API và báo cáo kỹ thuật.</p>
+    <div class="hero-meta">
+      <div class="meta-item"><span class="lbl">Thời gian</span><span class="val">3 tuần (15 ngày làm việc)</span></div>
+      <div class="meta-item"><span class="lbl">Nhóm</span><span class="val">2–3 sinh viên</span></div>
+      <div class="meta-item"><span class="lbl">Điểm tối đa</span><span class="val">100 điểm</span></div>
+      <div class="meta-item"><span class="lbl">Nộp bài</span><span class="val">GitHub Repo + Demo Video + Báo cáo</span></div>
+      <div class="meta-item"><span class="lbl">Slide tham chiếu</span><span class="val">Slides 5–7, 9, 11–16</span></div>
+    </div>
+  </div>
+  <div class="hero-bar"><div style="width:100%"></div></div>
+</div>
+
+<!-- ══════════════ BODY ══════════════ -->
+<div class="layout">
+
+<!-- Sidebar TOC -->
+<nav class="sidebar">
+  <div class="toc-lbl">Nội dung</div>
+  <ul class="toc-list">
+    <li><a href="#s0"><span class="toc-dot" style="background:var(--gold)"></span>Tổng quan Capstone</a></li>
+    <li><a href="#s1"><span class="toc-dot" style="background:var(--purple)"></span>Phạm vi công việc</a></li>
+    <li><a href="#s2"><span class="toc-dot" style="background:var(--blue)"></span>Tech Stack nâng cấp</a></li>
+    <li><a href="#s3"><span class="toc-dot" style="background:var(--cyan)"></span>Kiến trúc Pipeline</a></li>
+    <li><a href="#s4"><span class="toc-dot" style="background:var(--green)"></span>Thiết kế UI / Layout</a></li>
+    <li><a href="#s5"><span class="toc-dot" style="background:var(--gold)"></span>Quy trình thực hiện</a></li>
+    <li><a href="#s6"><span class="toc-dot" style="background:var(--red)"></span>Mục tiêu & Rubric</a></li>
+    <li><a href="#s7"><span class="toc-dot" style="background:var(--purple)"></span>Checklist nộp bài</a></li>
+  </ul>
+</nav>
+
+<main class="main">
+
+<!-- ════════ SECTION 0 — TỔNG QUAN ════════ -->
+<section class="section" id="s0">
+  <div class="section-hd">
+    <div class="section-num">00</div>
+    <div>
+      <div class="section-title">Tổng quan Capstone — Lab B → Production</div>
+      <div class="section-sub">Slide 15–16 · Key Takeaway: "The Pattern Transfers Across Domains"</div>
+    </div>
+  </div>
+
+  <div class="callout cap">
+    <div class="ci">🚀</div>
+    <div><strong>Mục tiêu cốt lõi (Slide 15):</strong> Nâng cấp Agentic Pipeline từ lab prototype lên hệ thống
+    AI production-grade thực sự — với semantic search, explainable AI, multi-step reasoning, và một API có thể tích hợp vào enterprise workflow. Bạn không làm lại từ đầu — bạn <em>mở rộng</em> những gì đã build.</div>
+  </div>
+
+  <div class="compare">
+    <div class="ccard card-lab">
+      <h5>🧪 Lab B (Baseline)</h5>
+      <ul>
+        <li>TF-IDF keyword retrieval (sparse)</li>
+        <li>RandomForest với 120 records CSV</li>
+        <li>Template-based executive report</li>
+        <li>FLAN-T5 optional explainer</li>
+        <li>Session memory (Python list)</li>
+        <li>Gradio UI đơn giản</li>
+        <li>FastAPI stub</li>
+      </ul>
+    </div>
+    <div class="ccard card-cap">
+      <h5>🏆 Capstone (Target)</h5>
+      <ul>
+        <li>FAISS + sentence-transformers (dense semantic)</li>
+        <li>Expanded dataset + SHAP explanations</li>
+        <li>OpenAI GPT-4o executive narrative</li>
+        <li>LangChain multi-step agent</li>
+        <li>SQLite persistent memory (production-grade)</li>
+        <li>Gradio UI nâng cao với SHAP charts</li>
+        <li>FastAPI với proper endpoints + auth</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout theory">
+    <div class="ci">🧠</div>
+    <div><strong>Tại sao các upgrade này quan trọng?</strong><br>
+    <strong>FAISS</strong>: Dense vector search tốt hơn TF-IDF khi query viết tắt, khác ngữ pháp nhưng cùng ý nghĩa (semantic similarity thay vì keyword match).<br>
+    <strong>SHAP</strong>: Basel IV yêu cầu bank phải giải thích automated credit decisions — SHAP cho phép "explain" từng prediction cụ thể.<br>
+    <strong>GPT-4o</strong>: Chất lượng narrative cao hơn FLAN-T5, hiểu context tốt hơn, phù hợp cho C-level executive reports.<br>
+    <strong>LangChain</strong>: Orchestrate multi-step reasoning — agent có thể tự quyết định dùng tool nào, khi nào.
+    </div>
+  </div>
+</section>
+
+<!-- ════════ SECTION 1 — PHẠM VI ════════ -->
+<section class="section" id="s1">
+  <div class="section-hd">
+    <div class="section-num">01</div>
+    <div>
+      <div class="section-title">Phạm vi Công việc — Scope of Work</div>
+      <div class="section-sub">3 module chính, chia theo tuần thực hiện</div>
+    </div>
+  </div>
+
+  <!-- MODULE A -->
+  <div class="phase">
+    <div class="phase-hd">
+      <div class="phase-icon" style="background:#EEF2FF">🔍</div>
+      <div>
+        <div class="phase-title">Module A — Enhanced Knowledge Retrieval</div>
+        <div class="phase-sub">Tuần 1 · Nâng cấp Layer 1 của pipeline</div>
+      </div>
+      <span class="phase-badge b-tech">Technical</span>
+    </div>
+    <div class="phase-body">
+      <ul class="steps">
+        <li>
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <strong>Thay TF-IDF bằng FAISS + Sentence-Transformers</strong>
+            <p>Cài <code>faiss-cpu</code> và <code>sentence-transformers</code>. Encode toàn bộ <code>enterprise_knowledge.csv</code> thành dense vectors với model <code>all-MiniLM-L6-v2</code>. Build FAISS index. So sánh recall score với TF-IDF baseline.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <strong>Mở rộng Knowledge Base</strong>
+            <p>Thêm ít nhất <strong>20 issue patterns mới</strong> covering: crypto fraud, ESG reporting, real-time FX hedging, AML compliance, digital onboarding. Tổng tối thiểu 30 patterns.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <strong>Semantic Search API</strong>
+            <p>Implement <code>POST /api/v1/search</code> endpoint nhận query text, return top-3 kết quả với similarity score, department routing và confidence. Viết unit tests.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <strong>Cross-domain Demo</strong>
+            <p>Demo "pattern transfers across domains" (Slide 15): test cùng pipeline với queries Healthcare (<em>"delayed patient billing reconciliation"</em>), Legal (<em>"contract review bottleneck"</em>), HR (<em>"payroll calculation errors"</em>). Kết quả routing có đúng không?</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- MODULE B -->
+  <div class="phase">
+    <div class="phase-hd">
+      <div class="phase-icon" style="background:#ECFDF5">🤖</div>
+      <div>
+        <div class="phase-title">Module B — Advanced ML + Explainability</div>
+        <div class="phase-sub">Tuần 1–2 · Nâng cấp Layer 2–3 + SHAP (Basel IV)</div>
+      </div>
+      <span class="phase-badge b-tech">Technical</span>
+    </div>
+    <div class="phase-body">
+      <ul class="steps">
+        <li>
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <strong>Expanded Dataset (≥ 300 records)</strong>
+            <p>Mở rộng <code>project_cost_data.csv</code> lên 300+ records. Thêm 2 features mới: <code>seniority_mix</code> (junior/mid/senior ratio) và <code>tech_complexity</code> (1–5). Retrain RandomForest, đo R² cải thiện.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <strong>SHAP Explanations (Slide 14 — Basel IV)</strong>
+            <p>Cài <code>shap</code>. Với mỗi prediction, generate SHAP waterfall plot giải thích: feature nào đẩy cost lên, feature nào kéo xuống, bao nhiêu $. Đây là yêu cầu compliance cho automated credit decisions.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <strong>Model Comparison</strong>
+            <p>So sánh RandomForest vs <code>GradientBoostingRegressor</code> vs <code>XGBoost</code>. Dùng cross-validation 5-fold. Report bảng: R², MAE, inference time, explainability support.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <strong>Confidence Calibration</strong>
+            <p>Thay 95% CI đơn giản bằng proper prediction interval. Vẽ coverage plot kiểm tra xem CI có thực sự cover 95% test samples không.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- MODULE C -->
+  <div class="phase">
+    <div class="phase-hd">
+      <div class="phase-icon" style="background:#FFF7ED">✍️</div>
+      <div>
+        <div class="phase-title">Module C — LangChain Agent + GPT-4o + Production UI</div>
+        <div class="phase-sub">Tuần 2–3 · Nâng cấp Layer 4–5 + Frontend + API</div>
+      </div>
+      <span class="phase-badge b-cap">Capstone</span>
+    </div>
+    <div class="phase-body">
+      <ul class="steps">
+        <li>
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <strong>LangChain Multi-step Agent (Slide 16)</strong>
+            <p>Build LangChain agent với 3 tools: <code>SearchKB(query)</code>, <code>PredictBudget(params)</code>, <code>GenerateReport(context)</code>. Agent tự quyết định thứ tự gọi tools dựa trên user query phức tạp. Test với câu hỏi multi-hop: <em>"So sánh budget nếu tăng team từ 10 lên 20 người với risk level khác nhau"</em>.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <strong>OpenAI GPT-4o Executive Narrator (Slide 6, 7)</strong>
+            <p>Thay FLAN-T5 bằng GPT-4o API (<code>openai</code> package). Implement Role Prompting + Structured Output pattern (Module 4). So sánh chất lượng narrative với FLAN-T5 baseline. Implement fallback: nếu không có API key → dùng template.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <strong>SQLite Persistent Memory (Slide 13)</strong>
+            <p>Thay Python list memory bằng SQLite database với <code>asyncpg</code> hoặc <code>sqlite3</code>. Schema: <code>sessions(id, business, issue, budget, urgency, timestamp)</code>. Implement query history, search qua lịch sử, export CSV.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <strong>Gradio UI Pro + FastAPI Production</strong>
+            <p>Nâng cấp UI với: SHAP waterfall chart, multi-query conversation panel, session history table, export to PDF report. FastAPI: implement <code>/analyze</code>, <code>/history</code>, <code>/export</code> endpoints với proper error handling và basic auth.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ SECTION 2 — TECH STACK ════════ -->
+<section class="section" id="s2">
+  <div class="section-hd">
+    <div class="section-num">02</div>
+    <div>
+      <div class="section-title">Tech Stack Nâng cấp</div>
+      <div class="section-sub">6 công nghệ mới — liên kết với từng Slide trong khoá</div>
+    </div>
+  </div>
+
+  <div class="tech-grid">
+    <div class="tech-card">
+      <div class="tc-icon">🔍</div>
+      <div class="tc-name">FAISS + Sentence-Transformers</div>
+      <div><span class="tc-pkg">faiss-cpu</span> <span class="tc-pkg">sentence-transformers</span></div>
+      <div class="tc-desc">Semantic search với dense vector embeddings — tìm kiếm theo <em>ý nghĩa</em> thay vì keyword. Cosine similarity trên 768-dim vectors.</div>
+      <span class="tc-slide">Slide 5, 12</span>
+    </div>
+    <div class="tech-card">
+      <div class="tc-icon">🔗</div>
+      <div class="tc-name">LangChain Agent</div>
+      <div><span class="tc-pkg">langchain</span> <span class="tc-pkg">langchain-openai</span></div>
+      <div class="tc-desc">Orchestrate multi-step reasoning. Agent tự chọn tool, chain results, retry on failure. Implements ReAct pattern (Reason + Act).</div>
+      <span class="tc-slide">Slide 16</span>
+    </div>
+    <div class="tech-card">
+      <div class="tc-icon">🧠</div>
+      <div class="tc-name">SHAP Explanations</div>
+      <div><span class="tc-pkg">shap</span></div>
+      <div class="tc-desc">TreeExplainer cho RandomForest. Waterfall plot, force plot, summary plot. Đáp ứng Basel IV Pillar 3 disclosure requirements.</div>
+      <span class="tc-slide">Slide 14</span>
+    </div>
+    <div class="tech-card">
+      <div class="tc-icon">⚡</div>
+      <div class="tc-name">OpenAI GPT-4o</div>
+      <div><span class="tc-pkg">openai</span></div>
+      <div class="tc-desc">Production-grade LLM narrator. Chat Completions API với system prompt (Role Prompting) và structured JSON output.</div>
+      <span class="tc-slide">Slide 6, 7</span>
+    </div>
+    <div class="tech-card">
+      <div class="tc-icon">🗄️</div>
+      <div class="tc-name">SQLite Memory</div>
+      <div><span class="tc-pkg">sqlite3</span> <span class="tc-pkg">asyncpg</span></div>
+      <div class="tc-desc">Persistent session storage thay Python list. Query history, cross-session context, export. Migration path → PostgreSQL production.</div>
+      <span class="tc-slide">Slide 13</span>
+    </div>
+    <div class="tech-card">
+      <div class="tc-icon">🚀</div>
+      <div class="tc-name">FastAPI Production</div>
+      <div><span class="tc-pkg">fastapi</span> <span class="tc-pkg">uvicorn</span></div>
+      <div class="tc-desc">REST API với proper endpoints, request validation (Pydantic), error handling, basic API key auth, auto-generated OpenAPI docs.</div>
+      <span class="tc-slide">Slide 14</span>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ SECTION 3 — PIPELINE ════════ -->
+<section class="section" id="s3">
+  <div class="section-hd">
+    <div class="section-num">03</div>
+    <div>
+      <div class="section-title">Kiến trúc Pipeline Nâng cấp</div>
+      <div class="section-sub">So sánh Lab B baseline vs Capstone target architecture</div>
+    </div>
+  </div>
+
+  <p style="font-size:13px;color:var(--gray);margin-bottom:10px;font-weight:600">
+    <span class="inline-badge ib-blue">Baseline</span> = Lab B pipeline &nbsp;·&nbsp;
+    <span class="inline-badge ib-gold">NEW</span> = Capstone additions
+  </p>
+
+  <div class="pipeline">
+    <div class="pipe-box active">
+      <span class="picon">📝</span>
+      <div class="plbl">User Input</div>
+      <span class="psub">Issue + params</span>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-box new">
+      <span class="picon">🧬</span>
+      <div class="plbl">FAISS Retrieval</div>
+      <span class="psub">Dense semantic</span>
+      <span class="ptag">NEW</span>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-box new">
+      <span class="picon">🔗</span>
+      <div class="plbl">LangChain Agent</div>
+      <span class="psub">Multi-step plan</span>
+      <span class="ptag">NEW</span>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-box active">
+      <span class="picon">🤖</span>
+      <div class="plbl">ML Predict</div>
+      <span class="psub">RandomForest+</span>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-box new">
+      <span class="picon">📐</span>
+      <div class="plbl">SHAP Explain</div>
+      <span class="psub">Basel IV comply</span>
+      <span class="ptag">NEW</span>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-box new">
+      <span class="picon">🗄️</span>
+      <div class="plbl">SQLite Memory</div>
+      <span class="psub">Persistent log</span>
+      <span class="ptag">NEW</span>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-box new">
+      <span class="picon">✍️</span>
+      <div class="plbl">GPT-4o Narrator</div>
+      <span class="psub">Role prompting</span>
+      <span class="ptag">NEW</span>
+    </div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-box active">
+      <span class="picon">📊</span>
+      <div class="plbl">Pro Dashboard</div>
+      <span class="psub">SHAP + API</span>
+    </div>
+  </div>
+
+  <div class="callout info">
+    <div class="ci">💡</div>
+    <div><strong>Implementation tip:</strong> Không cần implement tất cả cùng lúc. Start từ FAISS (Module A), test, rồi thêm SHAP (Module B), rồi LangChain + GPT-4o (Module C). Mỗi bước đều phải pass unit tests trước khi tiếp tục.</div>
+  </div>
+</section>
+
+<!-- ════════ SECTION 4 — UI DESIGN ════════ -->
+<section class="section" id="s4">
+  <div class="section-hd">
+    <div class="section-num">04</div>
+    <div>
+      <div class="section-title">Thiết kế Giao diện — UI Layout</div>
+      <div class="section-sub">Wireframe chi tiết · FinSight AI Pro Dashboard</div>
+    </div>
+  </div>
+
+  <div class="callout tip">
+    <div class="ci">🎨</div>
+    <div><strong>Design principle:</strong> UI phải phản ánh toàn bộ pipeline — người dùng nhìn vào thấy ngay data đang đi qua những layers nào. Không có black box.</div>
+  </div>
+
+  <!-- WIREFRAME -->
+  <div class="wireframe">
+    <div class="wf-bar">
+      <div class="wf-dots">
+        <div class="wf-dot" style="background:#EF4444"></div>
+        <div class="wf-dot" style="background:#F59E0B"></div>
+        <div class="wf-dot" style="background:#10B981"></div>
+      </div>
+      <div class="wf-title">FinSight AI Pro — Dashboard</div>
+      <div class="wf-url">http://localhost:7861</div>
+    </div>
+    <div class="wf-body">
+      <!-- App Header -->
+      <div class="app-header">
+        <div class="app-logo">🏦</div>
+        <div>
+          <div class="app-name">FinSight <span>AI Pro</span></div>
+          <div style="color:#64748B;font-size:11px;margin-top:1px">Enterprise Financial Intelligence Platform</div>
+        </div>
+        <div class="app-ver" style="margin-left:12px">v2.0</div>
+        <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
+          <div style="background:rgba(16,185,129,.15);color:#10B981;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;border:1px solid rgba(16,185,129,.3)">● FAISS READY</div>
+          <div style="background:rgba(139,92,246,.15);color:#8B5CF6;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;border:1px solid rgba(139,92,246,.3)">GPT-4o ON</div>
+        </div>
+      </div>
+
+      <!-- App Layout: Sidebar + Main -->
+      <div class="app-layout">
+        <!-- Left Sidebar: Step-by-step nav -->
+        <div class="app-sidebar">
+          <span class="sb-label">Input Pipeline</span>
+          <div class="sb-item active"><div class="sb-dot" style="background:var(--purple)"></div>Step 1 — Business Context</div>
+          <div class="sb-item inactive"><div class="sb-dot" style="background:var(--cyan)"></div>Step 2 — FAISS Retrieval</div>
+          <div class="sb-item inactive"><div class="sb-dot" style="background:var(--green)"></div>Step 3 — ML Prediction</div>
+
+          <span class="sb-label">Output Layers</span>
+          <div class="sb-item inactive"><div class="sb-dot" style="background:var(--gold)"></div>Step 4 — SHAP Explain</div>
+          <div class="sb-item inactive"><div class="sb-dot" style="background:var(--blue)"></div>Step 5 — GPT-4o Brief</div>
+          <div class="sb-item inactive"><div class="sb-dot" style="background:var(--red)"></div>Step 6 — Dashboard</div>
+
+          <span class="sb-label">Agent Tools</span>
+          <div class="sb-item inactive" style="font-size:11px">🔗 LangChain Agent</div>
+          <div class="sb-item inactive" style="font-size:11px">📂 Session History</div>
+          <div class="sb-item inactive" style="font-size:11px">📤 Export Report</div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="app-main">
+
+          <!-- KPI Row -->
+          <div class="wf-kpi-row">
+            <div class="wf-kpi">
+              <div class="wf-kpi-lbl">💰 Budget</div>
+              <div class="wf-kpi-val">$43,200</div>
+              <div style="font-size:10px;color:var(--green);margin-top:2px">↓ 12% vs baseline</div>
+            </div>
+            <div class="wf-kpi">
+              <div class="wf-kpi-lbl">🎯 Semantic Match</div>
+              <div class="wf-kpi-val">94.2%</div>
+              <div style="font-size:10px;color:var(--gray);margin-top:2px">FAISS dense score</div>
+            </div>
+            <div class="wf-kpi">
+              <div class="wf-kpi-lbl">📐 SHAP Confidence</div>
+              <div class="wf-kpi-val">87.5%</div>
+              <div style="font-size:10px;color:var(--gold);margin-top:2px">Basel IV compliant</div>
+            </div>
+            <div class="wf-kpi">
+              <div class="wf-kpi-lbl">🚨 Urgency</div>
+              <div class="wf-kpi-val" style="color:var(--red)">HIGH</div>
+              <div style="font-size:10px;color:var(--gray);margin-top:2px">Finance Advisor</div>
+            </div>
+          </div>
+
+          <!-- Tabs -->
+          <div>
+            <div class="wf-tabs">
+              <div class="wf-tab active">📋 Executive Brief</div>
+              <div class="wf-tab">📐 SHAP Explainer</div>
+              <div class="wf-tab">🔗 Agent Log</div>
+              <div class="wf-tab">🗄️ History</div>
+            </div>
+            <div class="wf-content">
+              <!-- SHAP preview -->
+              <div style="font-size:11px;font-weight:700;color:var(--navy);margin-bottom:12px">SHAP Feature Contributions — Why $43,200?</div>
+              <div class="shap-row">
+                <div class="shap-label">team_size (+12)</div>
+                <div class="shap-bar-wrap"><div class="shap-bar" style="width:75%;background:#EF4444"></div></div>
+                <div class="shap-val" style="color:var(--red)">+$8,400</div>
+              </div>
+              <div class="shap-row">
+                <div class="shap-label">risk_level (high)</div>
+                <div class="shap-bar-wrap"><div class="shap-bar" style="width:55%;background:#F59E0B"></div></div>
+                <div class="shap-val" style="color:#92400E">+$6,100</div>
+              </div>
+              <div class="shap-row">
+                <div class="shap-label">duration_weeks</div>
+                <div class="shap-bar-wrap"><div class="shap-bar" style="width:40%;background:#8B5CF6"></div></div>
+                <div class="shap-val" style="color:var(--purple)">+$4,200</div>
+              </div>
+              <div class="shap-row">
+                <div class="shap-label">region (northeast)</div>
+                <div class="shap-bar-wrap"><div class="shap-bar" style="width:20%;background:#00B4D8"></div></div>
+                <div class="shap-val" style="color:var(--blue)">+$1,800</div>
+              </div>
+              <div class="shap-row">
+                <div class="shap-label">tech_complexity</div>
+                <div class="shap-bar-wrap"><div class="shap-bar" style="width:12%;background:#10B981"></div></div>
+                <div class="shap-val" style="color:var(--green)">-$800</div>
+              </div>
+              <div style="font-size:10px;color:var(--gray);margin-top:10px;font-style:italic">
+                📌 Base value: $23,500 | Total SHAP contribution: +$19,700 | Final: $43,200
+              </div>
+            </div>
+          </div>
+
+          <!-- Chart + LangChain Agent Row -->
+          <div class="wf-chart-area">
+            <div class="wf-chart">
+              <div class="wf-chart-ph">
+                <div style="font-size:24px;margin-bottom:6px">🔵</div>
+                <div style="color:#94A3B8;font-size:11px;font-weight:700">Cost Breakdown<br>Donut Chart</div>
+                <div style="color:#CBD5E1;font-size:10px;margin-top:4px">Labor · Infra · Risk · OH</div>
+              </div>
+            </div>
+            <div class="wf-chat">
+              <div style="font-size:10px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">🔗 LangChain Agent Chat</div>
+              <div class="wf-chat-msg">So sánh budget nếu team tăng từ 10 → 20 người với risk cao và thấp?</div>
+              <div class="wf-chat-reply">🤖 <strong>Agent:</strong> Đang chạy 4 scenarios...<br>
+                ① Team 10, Low risk → <strong>$28,400</strong><br>
+                ② Team 10, High risk → <strong>$36,200</strong><br>
+                ③ Team 20, Low risk → <strong>$52,100</strong><br>
+                ④ Team 20, High risk → <strong>$66,800</strong>
+              </div>
+              <div class="wf-input-bar">
+                <div class="wf-input">Nhập câu hỏi cho Agent...</div>
+                <div class="wf-send">▶ Send</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p style="font-size:12px;color:var(--gray);margin-top:12px;font-style:italic">
+    ↑ Wireframe trên là thiết kế tham chiếu. Nhóm có thể điều chỉnh layout nhưng phải giữ đủ 6 thành phần: KPI row · SHAP tab · Agent chat · Chart area · History · Export.
+  </p>
+
+  <!-- UI COMPONENTS SPEC -->
+  <div class="phase" style="margin-top:20px">
+    <div class="phase-hd">
+      <div class="phase-icon" style="background:#F5F3FF">🎛️</div>
+      <div><div class="phase-title">Đặc tả UI Components</div></div>
+      <span class="phase-badge b-design">Design</span>
+    </div>
+    <div class="phase-body">
+      <table>
+        <tr><th>Component</th><th>Mô tả</th><th>Library</th><th>Bắt buộc</th></tr>
+        <tr><td><strong>Step Navigation Sidebar</strong></td><td>Left panel hiển thị 6 bước pipeline, highlight bước đang active</td><td>Gradio + CSS</td><td>✅</td></tr>
+        <tr><td><strong>KPI Cards Row</strong></td><td>4 cards: Budget · Semantic Score · SHAP Confidence · Urgency. Animate khi có kết quả mới</td><td>Gradio gr.Row</td><td>✅</td></tr>
+        <tr><td><strong>SHAP Waterfall Chart</strong></td><td>Horizontal bar chart màu đỏ/xanh chỉ contribution của từng feature vào prediction</td><td>Plotly / shap.plots</td><td>✅</td></tr>
+        <tr><td><strong>LangChain Agent Chat</strong></td><td>Chatbot panel nhận multi-hop queries, hiển thị agent reasoning steps</td><td>Gradio Chatbot</td><td>✅</td></tr>
+        <tr><td><strong>Session History Table</strong></td><td>Sortable table: Business · Issue · Budget · Urgency · Timestamp. Export CSV button</td><td>Gradio DataFrame</td><td>✅</td></tr>
+        <tr><td><strong>Status Indicators</strong></td><td>Header badges: FAISS READY · GPT-4o ON / OFF · DB CONNECTED</td><td>gr.HTML</td><td>✅</td></tr>
+        <tr><td><strong>PDF Export</strong></td><td>Button generate báo cáo PDF gồm: brief + SHAP chart + cost breakdown</td><td>reportlab / weasyprint</td><td>Optional +5đ</td></tr>
+        <tr><td><strong>Dark Mode Toggle</strong></td><td>Light/Dark theme switch</td><td>CSS variables</td><td>Optional +5đ</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ SECTION 5 — QUY TRÌNH ════════ -->
+<section class="section" id="s5">
+  <div class="section-hd">
+    <div class="section-num">05</div>
+    <div>
+      <div class="section-title">Quy trình Thực hiện</div>
+      <div class="section-sub">3 tuần · 4 milestones · Sprint-based development</div>
+    </div>
+  </div>
+
+  <div class="timeline">
+
+    <div class="milestone w1">
+      <div class="ms-week">TUẦN 1 (Ngày 1–5) · <span style="color:var(--cyan)">Foundation Upgrade</span></div>
+      <div class="ms-title">🔍 FAISS + Expanded KB + Dataset</div>
+      <ul class="ms-items">
+        <li>📌 Ngày 1–2: Cài faiss-cpu, sentence-transformers. Encode KB thành vectors. Build FAISS index. So sánh TF-IDF vs FAISS recall trên 10 test queries.</li>
+        <li>📌 Ngày 3: Mở rộng KB lên 30+ patterns (thêm các domains mới). Kiểm tra routing accuracy.</li>
+        <li>📌 Ngày 4: Mở rộng dataset lên 300+ records. Thêm 2 features mới. Retrain RandomForest.</li>
+        <li>📌 Ngày 5: Cài SHAP. Generate waterfall plot cho 3 test cases. Viết unit tests cho Module A.</li>
+        <li>📦 <strong>Deliverable W1:</strong> <code>core/database_v2.py</code> (FAISS) · Updated dataset · SHAP notebook · Test results</li>
+      </ul>
+    </div>
+
+    <div class="milestone w2">
+      <div class="ms-week">TUẦN 2 (Ngày 6–10) · <span style="color:var(--purple)">Intelligence Layer</span></div>
+      <div class="ms-title">🤖 LangChain + GPT-4o + SQLite</div>
+      <ul class="ms-items">
+        <li>📌 Ngày 6–7: Build LangChain agent với 3 tools. Test multi-hop query: "So sánh budget 3 scenarios khác nhau". Agent phải tự gọi PredictBudget 3 lần và tổng hợp kết quả.</li>
+        <li>📌 Ngày 8: Integrate OpenAI GPT-4o API. Implement Role Prompting + fallback. So sánh output với FLAN-T5.</li>
+        <li>📌 Ngày 9: Build SQLite memory layer. Schema + CRUD operations + query history API.</li>
+        <li>📌 Ngày 10: Kết nối tất cả: FAISS → LangChain → ML+SHAP → SQLite → GPT-4o. Test full pipeline end-to-end. Fix bugs.</li>
+        <li>📦 <strong>Deliverable W2:</strong> <code>core/agent.py</code> (LangChain) · <code>core/memory_db.py</code> (SQLite) · GPT-4o integration · E2E test passed</li>
+      </ul>
+    </div>
+
+    <div class="milestone w3">
+      <div class="ms-week">TUẦN 3 (Ngày 11–14) · <span style="color:var(--gold)">Production & Polish</span></div>
+      <div class="ms-title">🚀 UI Pro + FastAPI + Testing</div>
+      <ul class="ms-items">
+        <li>📌 Ngày 11: Build Gradio UI Pro: sidebar navigation, SHAP chart tab, agent chat panel, status badges.</li>
+        <li>📌 Ngày 12: FastAPI endpoints: <code>/api/v1/analyze</code>, <code>/api/v1/history</code>, <code>/api/v1/export</code>. Swagger docs auto-generated.</li>
+        <li>📌 Ngày 13: Integration testing. Performance benchmark: measure latency của từng layer. Error handling và logging.</li>
+        <li>📌 Ngày 14: Record demo video (5 phút). Viết báo cáo kỹ thuật. Chuẩn bị GitHub repo. Final review.</li>
+        <li>📦 <strong>Deliverable W3:</strong> Production UI · FastAPI · Tests · Video demo · Technical report</li>
+      </ul>
+    </div>
+
+    <div class="milestone w4">
+      <div class="ms-week">TUẦN 4 (Ngày 15) · <span style="color:var(--green)">Demo Day</span></div>
+      <div class="ms-title">🏁 Presentation & Submission</div>
+      <ul class="ms-items">
+        <li>📌 Trình bày demo live: 10 phút demo + 5 phút Q&A</li>
+        <li>📌 Nộp: GitHub repo link + demo video URL + báo cáo PDF</li>
+        <li>📌 Peer review: mỗi nhóm review 1 nhóm khác theo rubric</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════ SECTION 6 — MỤC TIÊU & RUBRIC ════════ -->
+<section class="section" id="s6">
+  <div class="section-hd">
+    <div class="section-num">06</div>
+    <div>
+      <div class="section-title">Mục tiêu Học tập & Rubric Chấm điểm</div>
+      <div class="section-sub">100 điểm · 4 tiêu chí chính</div>
+    </div>
+  </div>
+
+  <div class="callout theory">
+    <div class="ci">🎯</div>
+    <div><strong>Sau khi hoàn thành Capstone, sinh viên có thể:</strong><br>
+    ① Build và deploy một AI Agent production-grade từ đầu đến cuối · ② Implement semantic search (FAISS) và giải thích tại sao tốt hơn keyword search · ③ Giải thích ML predictions theo chuẩn compliance (SHAP + Basel IV) · ④ Integrate LLM (GPT-4o) vào enterprise workflow với proper prompting · ⑤ Design REST API cho AI system và document đầy đủ.
+    </div>
+  </div>
+
+  <div class="rubric-grid">
+    <div class="rubric-card">
+      <div class="rubric-head" style="background:#EFF6FF">
+        <div class="rubric-title" style="color:var(--blue)">⚙️ Technical Implementation</div>
+        <div class="rubric-pts" style="color:var(--blue)">40đ</div>
+      </div>
+      <div class="rubric-body">
+        <ul style="padding-left:16px">
+          <li>FAISS semantic search hoạt động đúng, recall > TF-IDF baseline (10đ)</li>
+          <li>SHAP waterfall chart render đúng, values tổng hợp = predicted cost (10đ)</li>
+          <li>LangChain agent xử lý được multi-hop query (5đ)</li>
+          <li>GPT-4o/FLAN-T5 integration với fallback (5đ)</li>
+          <li>SQLite memory: CRUD + query history (5đ)</li>
+          <li>FastAPI endpoints hoạt động với proper validation (5đ)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="rubric-card">
+      <div class="rubric-head" style="background:#FFFBEB">
+        <div class="rubric-title" style="color:#92400E">📊 Analysis & Insights</div>
+        <div class="rubric-pts" style="color:#92400E">25đ</div>
+      </div>
+      <div class="rubric-body">
+        <ul style="padding-left:16px">
+          <li>So sánh FAISS vs TF-IDF: test set + số liệu cụ thể (8đ)</li>
+          <li>SHAP interpretation đúng: giải thích được từng feature contribution (7đ)</li>
+          <li>Model comparison (RF vs GBR vs XGB): bảng R², MAE, latency (5đ)</li>
+          <li>Cross-domain demo: pipeline hoạt động với Healthcare/Legal/HR queries (5đ)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="rubric-card">
+      <div class="rubric-head" style="background:#ECFDF5">
+        <div class="rubric-title" style="color:var(--green)">🎨 UI/UX Quality</div>
+        <div class="rubric-pts" style="color:var(--green)">20đ</div>
+      </div>
+      <div class="rubric-body">
+        <ul style="padding-left:16px">
+          <li>6 required components đều có mặt (10đ)</li>
+          <li>SHAP chart interactive và readable (4đ)</li>
+          <li>Agent chat panel functional (3đ)</li>
+          <li>Status indicators phản ánh đúng trạng thái system (3đ)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="rubric-card">
+      <div class="rubric-head" style="background:#FEF2F2">
+        <div class="rubric-title" style="color:var(--red)">📝 Documentation</div>
+        <div class="rubric-pts" style="color:var(--red)">15đ</div>
+      </div>
+      <div class="rubric-body">
+        <ul style="padding-left:16px">
+          <li>README đầy đủ: install, run, architecture diagram (5đ)</li>
+          <li>Demo video 5 phút: cover tất cả features (5đ)</li>
+          <li>Technical report: decision rationale, lessons learned (5đ)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout warn">
+    <div class="ci">⭐</div>
+    <div><strong>Điểm thưởng (tối đa +15đ):</strong> PDF export report (+5đ) · Dark mode UI (+3đ) · Docker deployment (+4đ) · Real OpenAI API key với streaming response (+3đ)</div>
+  </div>
+</section>
+
+<!-- ════════ SECTION 7 — CHECKLIST ════════ -->
+<section class="section" id="s7">
+  <div class="section-hd">
+    <div class="section-num">07</div>
+    <div>
+      <div class="section-title">Checklist Nộp Bài</div>
+      <div class="section-sub">Kiểm tra trước khi submit</div>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><div class="chk"></div><strong>GitHub repo</strong> — public, có README, cấu trúc thư mục rõ ràng, không commit API keys</li>
+    <li><div class="chk"></div><strong>requirements.txt</strong> — đầy đủ tất cả dependencies, có version pinning</li>
+    <li><div class="chk"></div><strong>FAISS module</strong> — <code>core/database_v2.py</code> thay thế TF-IDF, unit tests passed</li>
+    <li><div class="chk"></div><strong>SHAP integration</strong> — waterfall chart render được từ Gradio UI, values đúng</li>
+    <li><div class="chk"></div><strong>LangChain agent</strong> — xử lý được câu hỏi multi-hop, log reasoning steps</li>
+    <li><div class="chk"></div><strong>GPT-4o / FLAN-T5</strong> — integration với fallback khi không có API key</li>
+    <li><div class="chk"></div><strong>SQLite memory</strong> — persist qua sessions, query history hoạt động</li>
+    <li><div class="chk"></div><strong>FastAPI</strong> — ít nhất 3 endpoints với Swagger docs (<code>/docs</code>)</li>
+    <li><div class="chk"></div><strong>Gradio UI</strong> — 6 required components đều functional</li>
+    <li><div class="chk"></div><strong>Demo video</strong> — 5 phút, cover FAISS demo, SHAP chart, Agent chat, export</li>
+    <li><div class="chk"></div><strong>Technical report</strong> — PDF, tối thiểu 8 trang: architecture, analysis, lessons learned</li>
+    <li><div class="chk"></div><strong>Cross-domain demo</strong> — chạy được với ít nhất 1 domain ngoài Finance (Healthcare / Legal / HR)</li>
+  </ul>
+
+  <div class="exercise">
+    <h4>🏆 Capstone Challenge — Bonus Track</h4>
+    <p>Nếu nhóm muốn vượt ra ngoài spec, đây là những thách thức nâng cao:</p>
+    <ul>
+      <li><strong>Real dataset integration:</strong> Kết nối Kaggle "Give Me Some Credit" (150K records) thay synthetic CSV. Handle imbalanced data, feature engineering, model retraining.</li>
+      <li><strong>Production deployment:</strong> Docker container + deploy lên Hugging Face Spaces hoặc Railway. CI/CD với GitHub Actions.</li>
+      <li><strong>RAG Architecture:</strong> Implement Retrieval-Augmented Generation đúng chuẩn — LLM đọc context từ FAISS trước khi generate, không chỉ nhận KB result dưới dạng text.</li>
+      <li><strong>Multi-tenant:</strong> Hỗ trợ nhiều công ty khác nhau với KB riêng biệt. Implement proper data isolation.</li>
+    </ul>
+    <div class="q">💬 Final Question: "Nếu bạn là CTO của một Fintech startup, bạn sẽ deploy pipeline này như thế nào trong production? Những rủi ro gì cần quản lý?" — Trả lời trong Technical Report.</div>
+  </div>
+</section>
+
+</main>
+</div>
+
+</body>
+</html>
